@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayManage : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public GameObject OptionPanel;
+    public GameObject MenuPanel;
     public void ButtonLog()
     {
         Debug.Log("BUTTON CLICKED!");
@@ -18,7 +19,7 @@ public class PlayManage : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OptionPanel.SetActive(!OptionPanel.activeSelf);
+            MenuPanel.SetActive(!MenuPanel.activeSelf);
         }
     }
     public void OpenOption()
@@ -29,8 +30,17 @@ public class PlayManage : MonoBehaviour
     {
         OptionPanel.SetActive(false);
     }
+    public void OpenMenu()
+    {
+        MenuPanel.SetActive(true);
+    }
+    public void CloseMenu()
+    {
+        MenuPanel.SetActive(false);
+    }
+
     public void GameBack()
     {
-        SceneManager.LoadScene("MainMenuScene");
+        SceneManager.LoadScene("TitleScene");
     }
 }

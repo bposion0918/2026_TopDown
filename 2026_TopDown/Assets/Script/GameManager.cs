@@ -43,4 +43,9 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("TitleScene");
     }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene("Level_1");
+    }
 }

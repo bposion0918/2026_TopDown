@@ -975,7 +975,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1244962893}
   m_FillRect: {fileID: 250854934}
-  m_HandleRect: {fileID: 1244962892}
+  m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 10
@@ -8699,7 +8699,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 831131376}
   m_FillRect: {fileID: 1461120539}
-  m_HandleRect: {fileID: 831131374}
+  m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 10

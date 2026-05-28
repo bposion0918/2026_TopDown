@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -102,4 +103,5 @@ public class PlayerController : MonoBehaviour
         timer = 0f;
         sr.sprite = currentSprites[frameIndex];
     }
+
 }

@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 8c14f29b6c150e0469432f017db56e4f
+guid: 99cecb65a738bf24bae8501831eb351d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3612949100623303054
-    second: Panel_0004_0
-  - first:
-      213: -5725816855778794179
-    second: Panel_0004_1
-  - first:
-      213: 3044477332978996770
-    second: Panel_0004_2
+      213: 7978851898147592464
+    second: SoundPanel_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -119,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Panel_0004_0
+      name: SoundPanel_0
       rect:
         serializedVersion: 2
-        x: 19
-        y: 16
-        width: 80
-        height: 127
+        x: 0
+        y: 0
+        width: 77
+        height: 124
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,52 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e8118369016c32230800000000000000
-      internalID: 3612949100623303054
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Panel_0004_1
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 76
-        width: 118
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d356c5608efc980b0800000000000000
-      internalID: -5725816855778794179
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Panel_0004_2
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 16
-        width: 118
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 22611f60108204a20800000000000000
-      internalID: 3044477332978996770
+      spriteID: 019d98017839abe60800000000000000
+      internalID: 7978851898147592464
       vertices: []
       indices: 
       edges: []
@@ -198,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Panel_0004_0: 3612949100623303054
-      Panel_0004_1: -5725816855778794179
-      Panel_0004_2: 3044477332978996770
+      SoundPanel_0: 7978851898147592464
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject OptionPanel;
     public GameObject MenuPanel;
+    public GameObject SoundPanel;
+    public GameObject SettingPanel;
     public void ButtonLog()
     {
         Debug.Log("BUTTON CLICKED!");
@@ -42,6 +44,16 @@ public class GameManager : MonoBehaviour
     public void GameBack()
     {
         SceneManager.LoadScene("TitleScene");
+    }
+
+    public void ToggleSound()
+    {
+        SoundPanel.SetActive(!SoundPanel.activeSelf);
+    }
+
+    public void ToggleSetting()
+    {
+        SettingPanel.SetActive(!SettingPanel.activeSelf);
     }
 
     public void Retry()

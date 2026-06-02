@@ -15,3 +15,4 @@ MonoBehaviour:
   stageIndex: 1
   mapDesigns:
   - {fileID: 1665035124006620670, guid: b203c4b4bcc433240ba6104c2b9aaa98, type: 3}
+  - {fileID: 8950977529489846272, guid: 8abb7ae71ec61684180fa1f60cc3637c, type: 3}

@@ -31,7 +31,7 @@ public class GameDataManager : MonoBehaviour
         }
     }
 
-    public void SaveData(PlayerData platerData)
+    public void SaveData(PlayerData playerData)
     {
         string filePath = Application.persistentDataPath + "/player_data.json";
         string json = JsonUtility.ToJson(playerData, true);
@@ -61,11 +61,11 @@ public class GameDataManager : MonoBehaviour
         if (playerData == null)
         {
             playerData = new PlayerData();
-            SceneManager.LoadScene("Level_1");
+            SceneManager.LoadScene("Level_");
         }
         else
         {
-            SceneManager.LoadScene("Level_1" + playerData.stage);
+            SceneManager.LoadScene("Level_" + playerData.stage);
         }
     }
     public void PlayerDead()

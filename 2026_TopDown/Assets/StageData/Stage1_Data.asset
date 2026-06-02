@@ -13,12 +13,5 @@ MonoBehaviour:
   m_Name: Stage1_Data
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageIndex: 1
-  startRoomPrefab: {fileID: 7474684240178812342, guid: 8a166538f3c4275499f75cc6344472dc, type: 3}
-  normalRoomPrefabs:
-  - {fileID: 7474684240178812342, guid: 8a166538f3c4275499f75cc6344472dc, type: 3}
-  - {fileID: 7474684240178812342, guid: 8a166538f3c4275499f75cc6344472dc, type: 3}
-  - {fileID: 7474684240178812342, guid: 8a166538f3c4275499f75cc6344472dc, type: 3}
-  - {fileID: 7474684240178812342, guid: 8a166538f3c4275499f75cc6344472dc, type: 3}
-  treasureRoomPrefab: {fileID: 0}
-  shopRoomPrefab: {fileID: 0}
-  bossRoomPrefab: {fileID: 0}
+  mapDesigns:
+  - {fileID: 1665035124006620670, guid: b203c4b4bcc433240ba6104c2b9aaa98, type: 3}

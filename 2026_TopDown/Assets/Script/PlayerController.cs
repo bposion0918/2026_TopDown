@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     public Sprite[] spriteDeath;
     public GameObject gameOverPanel;
 
+    [Header("오디오 설정")]
+    public AudioSource bgmAudioSource; // 배경음악을 재생 중인 AudioSource를 여기에 드래그합니다.
+
     // 내부에서 쓸 부품들 (컴포넌트 및 상태 변수)
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -149,21 +152,56 @@ public class PlayerController : MonoBehaviour
     }
 
     // ==============================================================
-    // 5. 사망 연출 (애니메이션, 위치 고정, UI 페이드인)
+    // 5. 사망 연출 (애니메이션 재생 -> UI 페이드인 대기 -> 데이터 매니저 호출)
     // ==============================================================
     private IEnumerator DeathSequence(Tilemap map)
     {
-        // 1. 이동 및 조작 차단
+        // 1. 이동 및 물리 조작 완벽히 차단
         isDead = true;
         velocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
 
-        // 2. UI 페이드인 시작 (별도로 알아서 돌아감)
-        StartCoroutine(FadeInGameOverPanel(2f));
+        // [추가] 죽자마자 BGM 즉시 끄기!
+        if (bgmAudioSource != null)
+        {
+            bgmAudioSource.Stop();
+        }
+        else
+        {
+            // 만약 인스펙터에 깜빡하고 등록 안 했을 때를 대비한 자동 찾기 기능
+            AudioSource automaticBgm = GameObject.FindWithTag("BGM")?.GetComponent<AudioSource>();
+            if (automaticBgm != null) automaticBgm.Stop();
+        }
 
-        // 3. 사망 도트 애니메이션 무한 반복
+        // 2. 사망 애니메이션 무한 반복 시작 (백그라운드에서 별도로 돌아감)
+        StartCoroutine(PlayDeathAnimationRoutine());
+
+        // 3. UI 페이드인 시작 및 완료될 때까지 '대기' (★ 핵심: yield return)
+        // 2초 동안 캔버스가 나타나기를 기다립니다.
+        yield return StartCoroutine(FadeInGameOverPanel(2f));
+
+        // 4. UI가 다 나타난 뒤, 0.1초 정도 여운을 주고 GameDataManager 호출
+        yield return new WaitForSeconds(0.1f);
+
+        if (GameDataManager.instance != null)
+        {
+            // 매니저를 불러와서 아이템을 날리고 GameOver 씬으로 이동시킵니다.
+            GameDataManager.instance.PlayerDead();
+        }
+        else
+        {
+            Debug.LogWarning("씬에 GameDataManager가 없습니다! 강제로 GameOver 씬을 로드합니다.");
+            SceneManager.LoadScene("GameOver");
+        }
+    }
+
+    // 사망 도트 애니메이션만 계속 돌려주는 전용 코루틴
+    private IEnumerator PlayDeathAnimationRoutine()
+    {
         int deathFrameIndex = 0;
-        while (true)
+
+        // 씬이 넘어가기 전까지 계속 사망 스프라이트를 넘겨줍니다.
+        while (isDead)
         {
             if (spriteDeath != null && spriteDeath.Length > 0)
             {
@@ -179,7 +217,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ==============================================================
-    // 6. UI 서서히 나타나기 (Fade In)
+    // 6. UI 서서히 나타나기 (Fade In) - 기존과 동일하지만 깔끔하게 유지
     // ==============================================================
     private IEnumerator FadeInGameOverPanel(float fadeDuration)
     {
@@ -192,7 +230,6 @@ public class PlayerController : MonoBehaviour
         canvasGroup.alpha = 0f;
         float elapsedTime = 0f;
 
-        // 시간이 지날수록 투명도(alpha)를 0에서 1로 올림
         while (elapsedTime < fadeDuration)
         {
             elapsedTime += Time.deltaTime;

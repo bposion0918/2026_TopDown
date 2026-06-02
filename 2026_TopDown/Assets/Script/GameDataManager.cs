@@ -31,9 +31,12 @@ public class GameDataManager : MonoBehaviour
         }
     }
 
-    public void SaveData(PlayerData playerData)
+    public void SaveData(PlayerData newPlayerData)
     {
+        this.playerData = newPlayerData;
+
         string filePath = Application.persistentDataPath + "/player_data.json";
+
         string json = JsonUtility.ToJson(playerData, true);
         System.IO.File.WriteAllText(filePath, json);
         Debug.Log("게임 데이터 저장됨:" + json);
@@ -57,7 +60,7 @@ public class GameDataManager : MonoBehaviour
 
     public void GameStart()
     {
-        PlayerData playerData = LoadData();
+        PlayerData data = LoadData();
         if (playerData == null)
         {
             playerData = new PlayerData();

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
+
+    public static AudioManager instance;
+
     [Header("오디오 소스 연결")]
     public AudioSource bgmSource; // 1번째 AudioSource (BGM용)
     public AudioSource sfxSource; // 2번째 AudioSource (SFX용)
@@ -13,7 +16,21 @@ public class AudioManager : MonoBehaviour
 
     [Header("효과음 파일")]
     public AudioClip buttonClickClip; // 버튼 누를 때 날 효과음 오디오 클립
+    // ★ [추가] 피격 시 재생할 오디오 클립
+    public AudioClip playerHitClip;
 
+    void Awake()
+    {
+        // ★ [추가] 싱글톤 초기화
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         // 1. 기기에 저장된 볼륨 값 불러오기 (저장된 기록이 없다면 기본값 10f 적용)
@@ -63,6 +80,14 @@ public class AudioManager : MonoBehaviour
         {
             // PlayOneShot은 소리가 겹치더라도 끊기지 않고 중첩해서 자연스럽게 재생해줍니다.
             sfxSource.PlayOneShot(buttonClickClip);
+        }
+    }
+
+    public void PlayHitSFX()
+    {
+        if (sfxSource != null && playerHitClip != null)
+        {
+            sfxSource.PlayOneShot(playerHitClip);
         }
     }
 }

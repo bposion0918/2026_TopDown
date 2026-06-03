@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - BGM
+  - Water
   layers:
   - Default
   - TransparentFX

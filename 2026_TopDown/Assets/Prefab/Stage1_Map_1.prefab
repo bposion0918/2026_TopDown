@@ -195,8 +195,8 @@ GameObject:
   - component: {fileID: 8827790447224089615}
   - component: {fileID: 776808108891610449}
   m_Layer: 0
-  m_Name: 'DeathTilemap '
-  m_TagString: Respawn
+  m_Name: 'WaterTilemap '
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

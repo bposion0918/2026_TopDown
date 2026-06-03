@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -17,38 +16,33 @@ public class PlayerController : MonoBehaviour
     public Sprite[] spriteRight;
 
     [Header("사망 애니메이션 및 UI")]
-    public Sprite[] spriteDeath;
+    public Sprite[] spriteWaterDeath;  // 물에 빠져 죽었을 때
+    public Sprite[] spriteNormalDeath; // 일반 공격으로 죽었을 때
     public GameObject gameOverPanel;
 
     [Header("오디오 설정")]
-    public AudioSource bgmAudioSource; // 배경음악을 재생 중인 AudioSource를 여기에 드래그합니다.
+    public AudioSource bgmAudioSource;
 
-    // 내부에서 쓸 부품들 (컴포넌트 및 상태 변수)
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Vector2 input;
     private Vector2 velocity;
 
-    private Sprite[] currentSprites; // 현재 재생 중인 방향의 이미지 배열
-    private int frameIndex = 0;      // 현재 보여줄 이미지의 순서(인덱스)
-    private float timer = 0f;        // 걷는 애니메이션용 타이머
+    private Sprite[] currentSprites;
+    private int frameIndex = 0;
+    private float timer = 0f;
 
-    private Coroutine deathTimerCoroutine; // 1.5초 시한폭탄을 담아둘 상자
-    private bool isDead = false;           // 플레이어 사망 여부
+    private bool isDead = false;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
-        // 시작할 때 정면(아래)을 보게 설정
         currentSprites = spriteDown;
         sr.sprite = currentSprites[0];
     }
 
-    // ==============================================================
-    // 1. 이동 입력 및 애니메이션 방향 전환
-    // ==============================================================
     public void OnMove(InputValue value)
     {
         if (isDead) return;
@@ -71,14 +65,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ==============================================================
-    // 2. 걷기 애니메이션 수동 재생 (매 프레임)
-    // ==============================================================
     private void Update()
     {
         if (isDead) return;
 
-        // 움직이지 않으면 첫 번째(서 있는) 이미지로 고정
         if (input.sqrMagnitude <= 0.01f)
         {
             frameIndex = 0;
@@ -86,7 +76,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // 지정된 시간(frameTime)마다 다음 이미지로 넘김
         timer += Time.deltaTime;
         if (timer >= frameTime)
         {
@@ -100,16 +89,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ==============================================================
-    // 3. 실제 물리적 이동 처리
-    // ==============================================================
     private void FixedUpdate()
     {
         if (isDead) return;
         rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
     }
 
-    // 방향이 바뀔 때 애니메이션 배열을 교체해 주는 함수
     private void ChangeSprites(Sprite[] newSprites)
     {
         if (currentSprites == newSprites) return;
@@ -121,71 +106,45 @@ public class PlayerController : MonoBehaviour
     }
 
     // ==============================================================
-    // 4. 함정 타일맵(DeathTilemap) 충돌 및 1.5초 타이머 관리
+    // 외부(PlayerHealth)에서 호출할 사망 트리거 함수들
     // ==============================================================
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void PlayWaterDeathAnimation()
     {
-        if (collision.CompareTag("Respawn") && !isDead)
-        {
-            Tilemap map = collision.GetComponent<Tilemap>();
-            deathTimerCoroutine = StartCoroutine(DeathTimerRoutine(map));
-        }
+        if (!isDead) StartCoroutine(DeathSequence(true));
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    public void PlayNormalDeathAnimation()
     {
-        if (collision.CompareTag("Respawn") && !isDead)
-        {
-            // 1.5초가 되기 전에 빠져나오면 코루틴(시한폭탄) 해제
-            if (deathTimerCoroutine != null)
-            {
-                StopCoroutine(deathTimerCoroutine);
-                deathTimerCoroutine = null;
-            }
-        }
-    }
-
-    private IEnumerator DeathTimerRoutine(Tilemap map)
-    {
-        yield return new WaitForSeconds(1.5f); // 1.5초 대기
-        StartCoroutine(DeathSequence(map));    // 시간 다 되면 사망 코루틴 시작
+        if (!isDead) StartCoroutine(DeathSequence(false));
     }
 
     // ==============================================================
-    // 5. 사망 연출 (애니메이션 재생 -> UI 페이드인 대기 -> 데이터 매니저 호출)
+    // 사망 연출 시퀀스
     // ==============================================================
-    private IEnumerator DeathSequence(Tilemap map)
+    private IEnumerator DeathSequence(bool isWaterDeath)
     {
-        // 1. 이동 및 물리 조작 완벽히 차단
         isDead = true;
         velocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
 
-        // [추가] 죽자마자 BGM 즉시 끄기!
         if (bgmAudioSource != null)
         {
             bgmAudioSource.Stop();
         }
         else
         {
-            // 만약 인스펙터에 깜빡하고 등록 안 했을 때를 대비한 자동 찾기 기능
             AudioSource automaticBgm = GameObject.FindWithTag("BGM")?.GetComponent<AudioSource>();
             if (automaticBgm != null) automaticBgm.Stop();
         }
 
-        // 2. 사망 애니메이션 무한 반복 시작 (백그라운드에서 별도로 돌아감)
-        StartCoroutine(PlayDeathAnimationRoutine());
+        // isWaterDeath 여부에 따라 다른 애니메이션을 재생하도록 전달
+        StartCoroutine(PlayDeathAnimationRoutine(isWaterDeath));
 
-        // 3. UI 페이드인 시작 및 완료될 때까지 '대기' (★ 핵심: yield return)
-        // 2초 동안 캔버스가 나타나기를 기다립니다.
         yield return StartCoroutine(FadeInGameOverPanel(2f));
-
-        // 4. UI가 다 나타난 뒤, 0.1초 정도 여운을 주고 GameDataManager 호출
         yield return new WaitForSeconds(0.1f);
 
         if (GameDataManager.instance != null)
         {
-            // 매니저를 불러와서 아이템을 날리고 GameOver 씬으로 이동시킵니다.
             GameDataManager.instance.PlayerDead();
         }
         else
@@ -195,19 +154,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 사망 도트 애니메이션만 계속 돌려주는 전용 코루틴
-    private IEnumerator PlayDeathAnimationRoutine()
+    private IEnumerator PlayDeathAnimationRoutine(bool isWaterDeath)
     {
         int deathFrameIndex = 0;
 
-        // 씬이 넘어가기 전까지 계속 사망 스프라이트를 넘겨줍니다.
+        // 원인에 따라 사용할 배열을 선택
+        Sprite[] targetSprites = isWaterDeath ? spriteWaterDeath : spriteNormalDeath;
+
         while (isDead)
         {
-            if (spriteDeath != null && spriteDeath.Length > 0)
+            if (targetSprites != null && targetSprites.Length > 0)
             {
-                sr.sprite = spriteDeath[deathFrameIndex];
+                sr.sprite = targetSprites[deathFrameIndex];
                 deathFrameIndex++;
-                if (deathFrameIndex >= spriteDeath.Length)
+                if (deathFrameIndex >= targetSprites.Length)
                 {
                     deathFrameIndex = 0;
                 }
@@ -216,9 +176,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ==============================================================
-    // 6. UI 서서히 나타나기 (Fade In) - 기존과 동일하지만 깔끔하게 유지
-    // ==============================================================
     private IEnumerator FadeInGameOverPanel(float fadeDuration)
     {
         if (gameOverPanel == null) yield break;

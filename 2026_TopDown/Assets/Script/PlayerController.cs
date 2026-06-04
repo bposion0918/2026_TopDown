@@ -15,6 +15,14 @@ public class PlayerController : MonoBehaviour
     public Sprite[] spriteLeft;
     public Sprite[] spriteRight;
 
+    [Header("물 속 방향별 애니메이션 스프라이트")]
+    public Sprite[] spriteWaterUp;
+    public Sprite[] spriteWaterDown;
+    public Sprite[] spriteWaterLeft;
+    public Sprite[] spriteWaterRight;
+
+    private bool isInWater = false;
+
     [Header("사망 애니메이션 및 UI")]
     public Sprite[] spriteWaterDeath;  
     public Sprite[] spriteNormalDeath; 
@@ -54,13 +62,13 @@ public class PlayerController : MonoBehaviour
         {
             if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
             {
-                if (input.x > 0) ChangeSprites(spriteRight);
-                else ChangeSprites(spriteLeft);
+                if (input.x > 0) ChangeSprites(isInWater ? spriteWaterRight : spriteRight);
+                else ChangeSprites(isInWater ? spriteWaterLeft : spriteLeft);
             }
             else
             {
-                if (input.y > 0) ChangeSprites(spriteUp);
-                else ChangeSprites(spriteDown);
+                if (input.y > 0) ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
+                else ChangeSprites(isInWater ? spriteWaterDown : spriteDown);
             }
         }
     }
@@ -113,6 +121,23 @@ public class PlayerController : MonoBehaviour
     public void PlayNormalDeathAnimation()
     {
         if (!isDead) StartCoroutine(DeathSequence(false));
+    }
+
+    public void SetInWaterState(bool inWater)
+    {
+        if (isInWater == inWater) return; // 상태가 똑같으면 무시
+
+        isInWater = inWater;
+
+        // 가만히 서 있을 때 물에 들어가거나 나와도 즉시 현재 바라보는 방향의 스프라이트를 갱신합니다.
+        if (currentSprites == spriteUp || currentSprites == spriteWaterUp)
+            ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
+        else if (currentSprites == spriteDown || currentSprites == spriteWaterDown)
+            ChangeSprites(isInWater ? spriteWaterDown : spriteDown);
+        else if (currentSprites == spriteLeft || currentSprites == spriteWaterLeft)
+            ChangeSprites(isInWater ? spriteWaterLeft : spriteLeft);
+        else if (currentSprites == spriteRight || currentSprites == spriteWaterRight)
+            ChangeSprites(isInWater ? spriteWaterRight : spriteRight);
     }
 
     private IEnumerator DeathSequence(bool isWaterDeath)

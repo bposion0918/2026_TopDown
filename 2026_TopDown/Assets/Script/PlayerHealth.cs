@@ -117,6 +117,7 @@ public class PlayerHealth : MonoBehaviour
         if (collision.CompareTag("Water"))
         {
             isInWater = true;
+            playerController.SetInWaterState(true);
         }
     }
 
@@ -125,6 +126,7 @@ public class PlayerHealth : MonoBehaviour
         if (collision.CompareTag("Water"))
         {
             isInWater = false;
+            playerController.SetInWaterState(false);
         }
     }
 

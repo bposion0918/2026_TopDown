@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("이동 및 속도")]
     public float moveSpeed = 2f;
-    public float frameTime = 0.15f; // 애니메이션 이미지가 바뀌는 속도
+    public float frameTime = 0.15f; 
 
     [Header("방향별 애니메이션 스프라이트")]
     public Sprite[] spriteUp;
@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     public Sprite[] spriteRight;
 
     [Header("사망 애니메이션 및 UI")]
-    public Sprite[] spriteWaterDeath;  // 물에 빠져 죽었을 때
-    public Sprite[] spriteNormalDeath; // 일반 공격으로 죽었을 때
+    public Sprite[] spriteWaterDeath;  
+    public Sprite[] spriteNormalDeath; 
     public GameObject gameOverPanel;
 
     [Header("오디오 설정")]
@@ -105,9 +105,6 @@ public class PlayerController : MonoBehaviour
         sr.sprite = currentSprites[frameIndex];
     }
 
-    // ==============================================================
-    // 외부(PlayerHealth)에서 호출할 사망 트리거 함수들
-    // ==============================================================
     public void PlayWaterDeathAnimation()
     {
         if (!isDead) StartCoroutine(DeathSequence(true));
@@ -118,9 +115,6 @@ public class PlayerController : MonoBehaviour
         if (!isDead) StartCoroutine(DeathSequence(false));
     }
 
-    // ==============================================================
-    // 사망 연출 시퀀스
-    // ==============================================================
     private IEnumerator DeathSequence(bool isWaterDeath)
     {
         isDead = true;
@@ -137,7 +131,6 @@ public class PlayerController : MonoBehaviour
             if (automaticBgm != null) automaticBgm.Stop();
         }
 
-        // isWaterDeath 여부에 따라 다른 애니메이션을 재생하도록 전달
         StartCoroutine(PlayDeathAnimationRoutine(isWaterDeath));
 
         yield return StartCoroutine(FadeInGameOverPanel(2f));
@@ -158,7 +151,6 @@ public class PlayerController : MonoBehaviour
     {
         int deathFrameIndex = 0;
 
-        // 원인에 따라 사용할 배열을 선택
         Sprite[] targetSprites = isWaterDeath ? spriteWaterDeath : spriteNormalDeath;
 
         while (isDead)

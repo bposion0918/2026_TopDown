@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject MenuPanel;
     public GameObject SoundPanel;
     public GameObject SettingPanel;
+    public bool TimeStop = false;
     public void ButtonLog()
     {
         Debug.Log("BUTTON CLICKED!");
@@ -19,9 +20,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && TimeStop)
         {
             MenuPanel.SetActive(!MenuPanel.activeSelf);
+            TimeStop = false;
+            Time.timeScale = 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && !TimeStop)
+        {
+            MenuPanel.SetActive(!MenuPanel.activeSelf);
+            TimeStop = true;
+            Time.timeScale = 0;
         }
     }
     public void OpenOption()

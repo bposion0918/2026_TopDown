@@ -9,7 +9,8 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("물 데미지 설정")]
     public float waterDamageInterval = 1f; 
-    private float waterTimer = 0f;
+
+    private float nextWaterDamageTime = 0f;
     private bool isInWater = false;
 
     private bool isDead = false;
@@ -19,6 +20,7 @@ public class PlayerHealth : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Coroutine flashCoroutine;
+
     [Header("피격 효과 설정")]
     public Color damageColor = Color.red;   
     public float flashDuration = 0.1f;       
@@ -44,15 +46,11 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isDead) return;
 
-        if (isInWater)
+        if (isInWater && Time.time >= nextWaterDamageTime)
         {
-            waterTimer += Time.deltaTime;
+            TakeDamage(1, true);
 
-            if (waterTimer >= waterDamageInterval)
-            {
-                TakeDamage(1, true);
-                waterTimer = 0f;
-            }
+            nextWaterDamageTime = Time.time + waterDamageInterval;
         }
     }
 
@@ -119,7 +117,6 @@ public class PlayerHealth : MonoBehaviour
         if (collision.CompareTag("Water"))
         {
             isInWater = true;
-            waterTimer = 1f;
         }
     }
 
@@ -128,7 +125,6 @@ public class PlayerHealth : MonoBehaviour
         if (collision.CompareTag("Water"))
         {
             isInWater = false;
-            waterTimer = 0f;
         }
     }
 

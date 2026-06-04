@@ -3284,6 +3284,7 @@ MonoBehaviour:
   MenuPanel: {fileID: 1616494345}
   SoundPanel: {fileID: 55437180}
   SettingPanel: {fileID: 477232013}
+  TimeStop: 0
 --- !u!4 &1282724766
 Transform:
   m_ObjectHideFlags: 0

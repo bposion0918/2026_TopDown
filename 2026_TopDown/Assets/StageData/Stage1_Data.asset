@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageIndex: 1
   startRooms:
-  - {fileID: 839356784910728822, guid: 1edc71d68911953428e6955ac7ae1c22, type: 3}
+  - {fileID: 839356784910728822, guid: 03eeff8738fec4f4b90c8337501561ee, type: 3}
   normalRooms:
   - {fileID: 839356784910728822, guid: 705a2ff0a01d0e24c9833e5e5d8fdb8b, type: 3}
-  - {fileID: 839356784910728822, guid: fbeb8e69a1f9c9c479317261bad585e0, type: 3}
   treasureRooms: []
   shopRooms: []
   bossRooms: []

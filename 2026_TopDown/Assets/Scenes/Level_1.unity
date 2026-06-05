@@ -1213,7 +1213,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 60, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &372258113
 MonoBehaviour:
@@ -1588,7 +1588,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 1.1
+  orthographic size: 1.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2048,7 +2048,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 60, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &731258744
 MonoBehaviour:
@@ -2912,9 +2912,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8253a08bdaa364a4681ae5ce0dc0cca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthUI
-  fullHeart: {fileID: -7134224125491679639, guid: 4a349c8185a641d469cbd8dd037ebd67, type: 3}
-  halfHeart: {fileID: -5903024442444494851, guid: 49e072c305c84e246b221a4488247daf, type: 3}
-  emptyHeart: {fileID: -8886713217412807493, guid: f864b84ed1505884eb41e637e3cd0efb, type: 3}
+  fullHeart: {fileID: -8886713217412807493, guid: f864b84ed1505884eb41e637e3cd0efb, type: 3}
+  halfHeart: {fileID: -7134224125491679639, guid: 4a349c8185a641d469cbd8dd037ebd67, type: 3}
+  emptyHeart: {fileID: -5903024442444494851, guid: 49e072c305c84e246b221a4488247daf, type: 3}
   heartImages:
   - {fileID: 372258113}
   - {fileID: 1182213427}
@@ -3296,7 +3296,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 60, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1182213427
 MonoBehaviour:
@@ -3818,7 +3818,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -784, y: 422}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 140, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1582793565
 MonoBehaviour:
@@ -3840,7 +3840,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -9121759037913120352, guid: 7b96f196dad991948b13568e8b597290, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

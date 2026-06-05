@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageIndex: 1
   startRooms:
-  - {fileID: 762744486342325877, guid: 985f0adafe288a34e94be25969b082d2, type: 3}
+  - {fileID: 839356784910728822, guid: 1edc71d68911953428e6955ac7ae1c22, type: 3}
   normalRooms:
-  - {fileID: 2946623188187246985, guid: 705a2ff0a01d0e24c9833e5e5d8fdb8b, type: 3}
-  - {fileID: 2225854073194769173, guid: 8c9c5bbda71c21041ad97b74c78b2319, type: 3}
-  - {fileID: 3348116075486253882, guid: c21d1887c3735444289886a52fd44098, type: 3}
-  - {fileID: 8522221588077494177, guid: 69cf62b6688933441b4b9bc41f8a7f88, type: 3}
-  - {fileID: 7655023806544761960, guid: c8b037f59f7872743810b32bfc63108f, type: 3}
+  - {fileID: 839356784910728822, guid: 705a2ff0a01d0e24c9833e5e5d8fdb8b, type: 3}
+  - {fileID: 839356784910728822, guid: fbeb8e69a1f9c9c479317261bad585e0, type: 3}
+  - {fileID: 839356784910728822, guid: a3da87525d7889b4bb29b835a19b0968, type: 3}
+  - {fileID: 839356784910728822, guid: f73968b17baf7e04baa9acfb72c2ac2b, type: 3}
+  - {fileID: 839356784910728822, guid: 0fa5ffed0fe9963429dce1b2bf3d2046, type: 3}
   treasureRooms: []
   shopRooms: []
   bossRooms: []

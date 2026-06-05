@@ -1631,7 +1631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e52691ab4a598aa41b5b9b1f724a1cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
-  speed: 10
+  speed: 20
 --- !u!1 &542414399
 GameObject:
   m_ObjectHideFlags: 0

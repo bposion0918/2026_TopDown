@@ -17,10 +17,6 @@ MonoBehaviour:
   - {fileID: 839356784910728822, guid: 1edc71d68911953428e6955ac7ae1c22, type: 3}
   normalRooms:
   - {fileID: 839356784910728822, guid: 705a2ff0a01d0e24c9833e5e5d8fdb8b, type: 3}
-  - {fileID: 839356784910728822, guid: fbeb8e69a1f9c9c479317261bad585e0, type: 3}
-  - {fileID: 839356784910728822, guid: a3da87525d7889b4bb29b835a19b0968, type: 3}
-  - {fileID: 839356784910728822, guid: f73968b17baf7e04baa9acfb72c2ac2b, type: 3}
-  - {fileID: 839356784910728822, guid: 0fa5ffed0fe9963429dce1b2bf3d2046, type: 3}
   treasureRooms: []
   shopRooms: []
   bossRooms: []

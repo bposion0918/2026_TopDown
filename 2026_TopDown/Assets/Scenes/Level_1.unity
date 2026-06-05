@@ -2118,9 +2118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   currentStageData: {fileID: 11400000, guid: 5097ee741bd755a49899535f6970b7bb, type: 2}
-  maxRooms: 6
-  roomWidth: 30
-  roomHeight: 20
+  maxRooms: 8
+  roomWidth: 15
+  roomHeight: 10
 --- !u!4 &755502727
 Transform:
   m_ObjectHideFlags: 0

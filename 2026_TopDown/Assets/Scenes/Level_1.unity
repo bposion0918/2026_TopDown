@@ -4298,7 +4298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6276cc171ddb8e429fd2304d2a52cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 1
+  moveSpeed: 0.8
   frameTime: 0.15
   spriteUp:
   - {fileID: 21300000, guid: c08b70ec91df1404eb961f2d6010c34d, type: 3}

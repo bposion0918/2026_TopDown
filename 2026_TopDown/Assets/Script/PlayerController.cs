@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("이동 및 속도")]
     public float moveSpeed = 2f;
-    public float frameTime = 0.15f; 
+    public float frameTime = 0.15f;
 
     [Header("방향별 애니메이션 스프라이트")]
     public Sprite[] spriteUp;
@@ -24,8 +24,8 @@ public class PlayerController : MonoBehaviour
     private bool isInWater = false;
 
     [Header("사망 애니메이션 및 UI")]
-    public Sprite[] spriteWaterDeath;  
-    public Sprite[] spriteNormalDeath; 
+    public Sprite[] spriteWaterDeath;
+    public Sprite[] spriteNormalDeath;
     public GameObject gameOverPanel;
 
     [Header("오디오 설정")]
@@ -40,7 +40,9 @@ public class PlayerController : MonoBehaviour
     private int frameIndex = 0;
     private float timer = 0f;
 
-    private bool isDead = false;
+    public bool isDead = false;
+
+    [HideInInspector] public Vector2 lastFacingDir = Vector2.down;
 
     private void Awake()
     {
@@ -62,13 +64,29 @@ public class PlayerController : MonoBehaviour
         {
             if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
             {
-                if (input.x > 0) ChangeSprites(isInWater ? spriteWaterRight : spriteRight);
-                else ChangeSprites(isInWater ? spriteWaterLeft : spriteLeft);
+                if (input.x > 0)
+                {
+                    ChangeSprites(isInWater ? spriteWaterRight : spriteRight);
+                    lastFacingDir = Vector2.right;
+                }
+                else
+                {
+                    ChangeSprites(isInWater ? spriteWaterLeft : spriteLeft);
+                    lastFacingDir = Vector2.left;
+                }
             }
             else
             {
-                if (input.y > 0) ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
-                else ChangeSprites(isInWater ? spriteWaterDown : spriteDown);
+                if (input.y > 0)
+                {
+                    ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
+                    lastFacingDir = Vector2.up;
+                }
+                else
+                {
+                    ChangeSprites(isInWater ? spriteWaterDown : spriteDown);
+                    lastFacingDir = Vector2.down;
+                }
             }
         }
     }
@@ -99,8 +117,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDead) return;
-        rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+        if (isDead)
+        {
+            rb.linearVelocity = Vector2.zero; // 사망 시 확실하게 멈춤
+            return;
+        }
+
+        // 변경점: MovePosition 대신 linearVelocity를 사용하여 물리 충돌을 더 자연스럽게 만듭니다.
+        rb.linearVelocity = velocity;
     }
 
     private void ChangeSprites(Sprite[] newSprites)
@@ -125,11 +149,10 @@ public class PlayerController : MonoBehaviour
 
     public void SetInWaterState(bool inWater)
     {
-        if (isInWater == inWater) return; // 상태가 똑같으면 무시
+        if (isInWater == inWater) return;
 
         isInWater = inWater;
 
-        // 가만히 서 있을 때 물에 들어가거나 나와도 즉시 현재 바라보는 방향의 스프라이트를 갱신합니다.
         if (currentSprites == spriteUp || currentSprites == spriteWaterUp)
             ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
         else if (currentSprites == spriteDown || currentSprites == spriteWaterDown)

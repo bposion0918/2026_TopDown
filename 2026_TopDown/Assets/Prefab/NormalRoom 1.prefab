@@ -5785,7 +5785,7 @@ MonoBehaviour:
   - {fileID: 8641641059305245140, guid: 84bd6beefccf4074ab6f72748f3ab45c, type: 3}
   minMonsters: 1
   maxMonsters: 3
-  spawnAreaSize: {x: 1.7, y: 0.8}
+  spawnAreaSize: {x: 1.4, y: 0.7}
   doorsInRoom:
   - {fileID: 3029051080106660074}
   - {fileID: 1803132252949594391}

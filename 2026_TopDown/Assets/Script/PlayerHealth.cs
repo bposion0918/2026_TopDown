@@ -26,20 +26,20 @@ public class PlayerHealth : MonoBehaviour
     public float invincibilityTime = 1.0f; // 무적 시간 (1초 뒤에 다시 몬스터에게 데미지를 입음)
     private bool isInvincible = false;     // 현재 플레이어가 무적 상태인지 확인하는 변수
 
+    private int playerLayer;
+    private int enemyLayer;
+
     void Start()
     {
         currentHealth = maxHealth;
         playerController = GetComponent<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (healthUI != null)
-        {
-            healthUI.UpdateHearts(currentHealth);
-        }
-        else
-        {
-            Debug.LogError(" PlayerHealth 스크립트에 HealthUI가 연결되지 않았습니다!");
-        }
+        if (healthUI != null) healthUI.UpdateHearts(currentHealth);
+
+        //  2. 시작할 때 Player와 Enemy의 레이어 번호를 찾아옵니다.
+        playerLayer = LayerMask.NameToLayer("Player");
+        enemyLayer = LayerMask.NameToLayer("Enemy");
     }
 
     void Update()
@@ -104,6 +104,9 @@ public class PlayerHealth : MonoBehaviour
     {
         isInvincible = true;
 
+        // 핵심: 무적 상태가 시작되면 플레이어와 몬스터 레이어 간의 물리 충돌을 무시합니다! (통과됨)
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
+
         // 빨간색 피격 효과가 끝날 때까지 잠깐 대기합니다.
         yield return new WaitForSeconds(flashDuration);
 
@@ -112,15 +115,18 @@ public class PlayerHealth : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < blinkTime)
         {
-            spriteRenderer.color = new Color(1f, 1f, 1f, 0.3f); // 반투명
+            spriteRenderer.color = new Color(1f, 1f, 1f, 0.3f);
             yield return new WaitForSeconds(0.1f);
-            spriteRenderer.color = new Color(1f, 1f, 1f, 1f); // 원상복구
+            spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
             yield return new WaitForSeconds(0.1f);
             elapsed += 0.2f;
         }
 
-        spriteRenderer.color = Color.white; // 확실히 원상복구
-        isInvincible = false; // 무적 종료, 이제 다시 맞을 수 있음
+        spriteRenderer.color = Color.white;
+        isInvincible = false;
+
+        // 핵심: 무적이 끝나면 다시 두 레이어가 물리적으로 부딪히도록 돌려놓습니다!
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
     }
 
     private void Die(bool isWaterDeath)

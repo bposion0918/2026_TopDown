@@ -4486,7 +4486,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.00049477816, y: -0.052189916}
+  m_Offset: {x: -0.00074888766, y: -0.047361776}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -4496,7 +4496,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.13489181, y: 0.075200975}
+  m_Size: {x: 0.12320265, y: 0.065544695}
   m_EdgeRadius: 0
 --- !u!114 &1943371452
 MonoBehaviour:
@@ -4512,7 +4512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 6
   currentHealth: 0
-  waterDamageInterval: 1
+  waterDamageInterval: 0.5
   healthUI: {fileID: 966338981}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
@@ -4530,7 +4530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackDuration: 0.4
-  attackCooldown: 1.5
+  attackCooldown: 1.4
   weaponLingerTime: 0.2
   swingAngle: 135
   angleOffset: 90
@@ -4941,7 +4941,7 @@ Transform:
   m_GameObject: {fileID: 2018051005}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.16, z: 0}
+  m_LocalPosition: {x: 0, y: -0.1847, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

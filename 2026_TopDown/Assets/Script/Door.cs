@@ -53,7 +53,7 @@ public class Door : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
 
         foreach (GameObject enemy in enemies)
         {

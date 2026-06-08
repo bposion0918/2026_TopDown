@@ -64,6 +64,10 @@ Transform:
   - {fileID: 527726356191477922}
   - {fileID: 5018390449676555763}
   - {fileID: 7835376037637132366}
+  - {fileID: 2866742765121287156}
+  - {fileID: 7954405919366065335}
+  - {fileID: 1015825423709481711}
+  - {fileID: 5848118933121727249}
   m_Father: {fileID: 3377291171150401467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &8138937050839876042
@@ -109,10 +113,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8816867751263899686}
-  - {fileID: 2866742765121287156}
-  - {fileID: 7954405919366065335}
-  - {fileID: 1015825423709481711}
-  - {fileID: 5848118933121727249}
   - {fileID: 6773549904620229947}
   - {fileID: 7519393929842645362}
   - {fileID: 8762234899583286825}
@@ -4546,13 +4546,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288012532733142807}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.955, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.9550002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4031900377765756121}
-  m_Father: {fileID: 3377291171150401467}
+  m_Father: {fileID: 8816867751263899686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5779981805897497626
 MonoBehaviour:
@@ -4567,7 +4567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 4031900377765756121}
-  animator: {fileID: 0}
+  animator: {fileID: 5243439423708208850}
   solidCollider: {fileID: 5296460775767338464}
   isLocked: 0
   connectedDoor: {fileID: 0}
@@ -4774,13 +4774,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368653504912100947}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: -0.955, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalPosition: {x: -0, y: -0.9550003, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3636595917894678161}
-  m_Father: {fileID: 3377291171150401467}
+  m_Father: {fileID: 8816867751263899686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!114 &4401135160766299003
 MonoBehaviour:
@@ -4795,7 +4795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 3636595917894678161}
-  animator: {fileID: 0}
+  animator: {fileID: 2194520631883722820}
   solidCollider: {fileID: 7477730939940866952}
   isLocked: 0
   connectedDoor: {fileID: 0}
@@ -5278,13 +5278,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3050669452643706509}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 1.425, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 248616529845486675}
-  m_Father: {fileID: 3377291171150401467}
+  m_Father: {fileID: 8816867751263899686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &3029051080106660074
 MonoBehaviour:
@@ -5299,7 +5299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 248616529845486675}
-  animator: {fileID: 0}
+  animator: {fileID: 6957767162448314493}
   solidCollider: {fileID: 149753117395631685}
   isLocked: 0
   connectedDoor: {fileID: 0}
@@ -5537,13 +5537,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4059653528274951746}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -1.425, y: -0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -1.4250004, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1859468009771906330}
-  m_Father: {fileID: 3377291171150401467}
+  m_Father: {fileID: 8816867751263899686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &1803132252949594391
 MonoBehaviour:
@@ -5558,7 +5558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 1859468009771906330}
-  animator: {fileID: 0}
+  animator: {fileID: 2826105681575101434}
   solidCollider: {fileID: 5558880116065156255}
   isLocked: 0
   connectedDoor: {fileID: 0}
@@ -5848,6 +5848,7 @@ GameObject:
   - component: {fileID: 6773549904620229947}
   - component: {fileID: 9146921437842566687}
   - component: {fileID: 3641198683580275287}
+  - component: {fileID: 2582290537976486113}
   m_Layer: 0
   m_Name: WallBlocker_Right
   m_TagString: Untagged
@@ -5975,6 +5976,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.32, y: 0.32}
   m_EdgeRadius: 0
+--- !u!95 &2582290537976486113
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5343587365425101906}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e6ff0a83238fdac4289d026ddf769e77, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6628679609749881311
 GameObject:
   m_ObjectHideFlags: 0

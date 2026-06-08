@@ -2151,8 +2151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   currentStageData: {fileID: 11400000, guid: 5097ee741bd755a49899535f6970b7bb, type: 2}
   maxRooms: 8
-  roomWidth: 15
-  roomHeight: 10
+  roomWidth: 30
+  roomHeight: 25
 --- !u!4 &755502727
 Transform:
   m_ObjectHideFlags: 0
@@ -4365,7 +4365,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 122e1fe314dd750408f27ad948a99c0d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4516,6 +4516,7 @@ MonoBehaviour:
   healthUI: {fileID: 966338981}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
+  invincibilityTime: 1
 --- !u!114 &1943371453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4923,6 +4924,7 @@ GameObject:
   - component: {fileID: 2018051006}
   - component: {fileID: 2018051008}
   - component: {fileID: 2018051007}
+  - component: {fileID: 2018051009}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -4979,17 +4981,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0016485602, y: -0.036268175}
+  m_Offset: {x: 0.0016485602, y: -0.020112723}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.15666667, y: 0.17777778}
+    oldSize: {x: 0.15833333, y: 0.16666667}
     newSize: {x: 0.282, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.16407976, y: 0.08746362}
+  m_Size: {x: 0.16407976, y: 0.055152714}
   m_EdgeRadius: 0
 --- !u!212 &2018051008
 SpriteRenderer:
@@ -5040,7 +5042,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 9147806756654571564, guid: d0a71120033023a488d64e7e5b10f10d, type: 3}
+  m_Sprite: {fileID: 6657979916127509319, guid: 5a41d6588ed9f4143811295b6f034827, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5050,6 +5052,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &2018051009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018051005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c07baa084e4c94c96273c36eb47031, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeapon
+  damage: 5
+  knockbackPower: 1
 --- !u!1 &2041455688
 GameObject:
   m_ObjectHideFlags: 0

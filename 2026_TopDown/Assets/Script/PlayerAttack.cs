@@ -5,10 +5,10 @@ using System.Collections;
 public class PlayerAttack : MonoBehaviour
 {
     [Header("공격 설정")]
-    public float attackDuration = 0.5f; // 무기 휘두르는 시간
-    public float attackCooldown = 1.0f; // 공격 후 다음 공격까지 걸리는 시간 (기본 1초)
-    public float weaponLingerTime = 0.3f; // 👈 무기를 다 휘두른 후 이미지가 남아있는 시간
-    public float swingAngle = 60f;      // 휘두르는 각도
+    public float attackDuration = 0.5f;
+    public float attackCooldown = 1.0f;
+    public float weaponLingerTime = 0.3f;
+    public float swingAngle = 60f;
 
     [Header("무기 각도 보정")]
     public float angleOffset = 90f;
@@ -20,16 +20,20 @@ public class PlayerAttack : MonoBehaviour
     private bool isAttacking = false;
     private bool canAttack = true;
     private PlayerController playerController;
-    private Collider2D weaponCollider; // 👈 무기의 타격 판정을 제어할 변수
+    private Collider2D weaponCollider;
+
+    //  새로 추가: PlayerWeapon 스크립트를 조종하기 위한 변수
+    private PlayerWeapon playerWeaponScript;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
 
-        // 무기 오브젝트에 붙어있는 Collider2D를 자동으로 찾아옵니다.
         if (weaponObject != null)
         {
             weaponCollider = weaponObject.GetComponent<Collider2D>();
+            //  무기 오브젝트에 붙어있는 PlayerWeapon 스크립트도 찾아옵니다.
+            playerWeaponScript = weaponObject.GetComponent<PlayerWeapon>();
         }
 
         weaponObject.SetActive(false);
@@ -48,7 +52,13 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         canAttack = false;
 
-        // 1. 공격 시작: 무기 이미지와 콜라이더(타격 판정)를 모두 켭니다.
+        //  공격 시작 시 가장 먼저 할 일: 무기의 타격 명부를 싹 비워줍니다!
+        if (playerWeaponScript != null)
+        {
+            playerWeaponScript.ClearHitList();
+        }
+
+        // 1. 무기 이미지와 콜라이더(타격 판정) 켜기
         weaponObject.SetActive(true);
         if (weaponCollider != null) weaponCollider.enabled = true;
 
@@ -57,7 +67,7 @@ public class PlayerAttack : MonoBehaviour
 
         float elapsedTime = 0f;
 
-        // 2. 0.5초(attackDuration) 동안 무기 회전시키기
+        // 2. 무기 회전시키기
         while (elapsedTime < attackDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -66,17 +76,17 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         }
 
-        // 3. 휘두르기 완료: 이미지는 남겨두되, 타격 판정(Collider)만 즉시 꺼서 억울한 피격을 막습니다.
+        // 3. 타격 판정(Collider) 끄기
         if (weaponCollider != null) weaponCollider.enabled = false;
 
-        // 4. 무기 이미지가 화면에 남아있는 시간(0.3초)만큼 대기합니다.
+        // 4. 무기 잔상 대기
         yield return new WaitForSeconds(weaponLingerTime);
 
-        // 5. 대기 시간이 끝나면 무기를 완전히 숨기고 공격 상태를 종료합니다.
+        // 5. 무기 숨기기
         weaponObject.SetActive(false);
         isAttacking = false;
 
-        // 6. 쿨타임 대기 (전체 쿨타임 1초에서 휘두른 시간(0.5)과 잔상 시간(0.3)을 뺀 나머지 시간만 대기)
+        // 6. 쿨타임 계산 및 대기
         float remainingCooldown = attackCooldown - (attackDuration + weaponLingerTime);
         if (remainingCooldown > 0)
         {

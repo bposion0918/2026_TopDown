@@ -898,6 +898,7 @@ MonoBehaviour:
   MenuPanel: {fileID: 0}
   SoundPanel: {fileID: 0}
   SettingPanel: {fileID: 0}
+  TimeStop: 0
 --- !u!4 &812919892
 Transform:
   m_ObjectHideFlags: 0
@@ -1050,7 +1051,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8886713217412807493, guid: f864b84ed1505884eb41e637e3cd0efb, type: 3}
+  m_Sprite: {fileID: -5903024442444494851, guid: 49e072c305c84e246b221a4488247daf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1204,7 +1205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8886713217412807493, guid: f864b84ed1505884eb41e637e3cd0efb, type: 3}
+  m_Sprite: {fileID: -5903024442444494851, guid: 49e072c305c84e246b221a4488247daf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1481,7 +1482,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8886713217412807493, guid: f864b84ed1505884eb41e637e3cd0efb, type: 3}
+  m_Sprite: {fileID: -5903024442444494851, guid: 49e072c305c84e246b221a4488247daf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

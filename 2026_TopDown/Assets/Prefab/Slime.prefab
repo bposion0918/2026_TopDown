@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f57f347683659a4b85e4f87638cf963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 20
+  maxHealth: 30
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   deathSprites:

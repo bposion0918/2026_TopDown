@@ -15,6 +15,9 @@ public class PlayerAttack : MonoBehaviour
     public float chargeInterval = 1.0f;
     public float damageBonusPerInterval = 0.2f;
 
+    // 🌟 새로 추가: 끝까지 모았을 때만 곱해질 폭발적인 보너스 배율
+    public float maxChargeBonus = 3.0f;
+
     private float currentChargeTime = 0f;
     private bool isCharging = false;
     private int originalBaseDamage = 5;
@@ -149,7 +152,15 @@ public class PlayerAttack : MonoBehaviour
 
             int chargeLevel = Mathf.FloorToInt(currentChargeTime / chargeInterval);
             float damageMultiplier = 1.0f + (chargeLevel * damageBonusPerInterval);
+            // 1. 일단 20%씩 증가한 기본 데미지를 계산합니다.
             int finalDamage = Mathf.RoundToInt(originalBaseDamage * damageMultiplier);
+
+            // 🌟 2. 만약 5초(최대치)까지 끝까지 모았다면, 막대한 보너스 배율을 곱해줍니다!
+            if (currentChargeTime >= maxChargeTime)
+            {
+                finalDamage = Mathf.RoundToInt(finalDamage * maxChargeBonus);
+                Debug.Log("🔥 [풀 차지 보너스 발동!] 데미지 3배 증폭!");
+            }
 
             playerWeaponScript.damage = finalDamage;
 

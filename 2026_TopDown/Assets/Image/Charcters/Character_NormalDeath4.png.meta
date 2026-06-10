@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 36649ed4ebfbdc24bbb74e27ed8766fa
+guid: 3c86621e9e13ec84d90b628c26bc4e49
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1102063593082397332
-    second: "Character_\uC8FD\uC74C2_0"
-  - first:
-      213: 2360010837028668537
-    second: "Character_\uC8FD\uC74C2_1"
-  - first:
-      213: -4841307030804764160
-    second: "Character_\uC8FD\uC74C2_2"
+      213: 2203606929526745045
+    second: Character_NormalDeath4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -52,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1000
+  spritePixelsToUnits: 2000
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -119,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Character_\uC8FD\uC74C2_0"
+      name: Character_NormalDeath4_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 129
-        width: 11
-        height: 22
+        y: 229
+        width: 261
+        height: 352
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,52 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c6dde66400fa4b0f0800000000000000
-      internalID: -1102063593082397332
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Character_\uC8FD\uC74C2_1"
-      rect:
-        serializedVersion: 2
-        x: 149
-        y: 119
-        width: 11
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9748a273a5170c020800000000000000
-      internalID: 2360010837028668537
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "Character_\uC8FD\uC74C2_2"
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 160
-        height: 81
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 00ae744e7e830dcb0800000000000000
-      internalID: -4841307030804764160
+      spriteID: 5d7e703c3d8c49e10800000000000000
+      internalID: 2203606929526745045
       vertices: []
       indices: 
       edges: []
@@ -188,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -198,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Character_\uC8FD\uC74C2_0": -1102063593082397332
-      "Character_\uC8FD\uC74C2_1": 2360010837028668537
-      "Character_\uC8FD\uC74C2_2": -4841307030804764160
+      Character_NormalDeath4_0: 2203606929526745045
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f3594c30e3ce6d9459292b5b089f9e39
+guid: 604298f8f61860041ac38886b49bfe5a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7949060275451961586
-    second: "Character_\uBB3C\uC18D\uC67C\uCABD1_0"
+      213: -8452623334408967993
+    second: Character_NormalDeath3_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1000
+  spritePixelsToUnits: 2000
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Character_\uBB3C\uC18D\uC67C\uCABD1_0"
+      name: Character_NormalDeath3_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 160
-        height: 160
+        x: 59
+        y: 129
+        width: 261
+        height: 352
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2f0ab70643cb05e60800000000000000
-      internalID: 7949060275451961586
+      spriteID: 7c8206c7cdf32ba80800000000000000
+      internalID: -8452623334408967993
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Character_\uBB3C\uC18D\uC67C\uCABD1_0": 7949060275451961586
+      Character_NormalDeath3_0: -8452623334408967993
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

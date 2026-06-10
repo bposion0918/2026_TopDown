@@ -15,16 +15,7 @@ public class PlayerController : MonoBehaviour
     public Sprite[] spriteLeft;
     public Sprite[] spriteRight;
 
-    [Header("물 속 방향별 애니메이션 스프라이트")]
-    public Sprite[] spriteWaterUp;
-    public Sprite[] spriteWaterDown;
-    public Sprite[] spriteWaterLeft;
-    public Sprite[] spriteWaterRight;
-
-    private bool isInWater = false;
-
     [Header("사망 애니메이션 및 UI")]
-    public Sprite[] spriteWaterDeath;
     public Sprite[] spriteNormalDeath;
     public GameObject gameOverPanel;
 
@@ -66,12 +57,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (input.x > 0)
                 {
-                    ChangeSprites(isInWater ? spriteWaterRight : spriteRight);
+                    ChangeSprites(spriteRight);
                     lastFacingDir = Vector2.right;
                 }
                 else
                 {
-                    ChangeSprites(isInWater ? spriteWaterLeft : spriteLeft);
+                    ChangeSprites(spriteLeft);
                     lastFacingDir = Vector2.left;
                 }
             }
@@ -79,12 +70,12 @@ public class PlayerController : MonoBehaviour
             {
                 if (input.y > 0)
                 {
-                    ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
+                    ChangeSprites(spriteUp);
                     lastFacingDir = Vector2.up;
                 }
                 else
                 {
-                    ChangeSprites(isInWater ? spriteWaterDown : spriteDown);
+                    ChangeSprites(spriteDown);
                     lastFacingDir = Vector2.down;
                 }
             }
@@ -119,11 +110,10 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead)
         {
-            rb.linearVelocity = Vector2.zero; // 사망 시 확실하게 멈춤
+            rb.linearVelocity = Vector2.zero;
             return;
         }
 
-        // 변경점: MovePosition 대신 linearVelocity를 사용하여 물리 충돌을 더 자연스럽게 만듭니다.
         rb.linearVelocity = velocity;
     }
 
@@ -137,33 +127,12 @@ public class PlayerController : MonoBehaviour
         sr.sprite = currentSprites[frameIndex];
     }
 
-    public void PlayWaterDeathAnimation()
-    {
-        if (!isDead) StartCoroutine(DeathSequence(true));
-    }
-
     public void PlayNormalDeathAnimation()
     {
-        if (!isDead) StartCoroutine(DeathSequence(false));
+        if (!isDead) StartCoroutine(DeathSequence());
     }
 
-    public void SetInWaterState(bool inWater)
-    {
-        if (isInWater == inWater) return;
-
-        isInWater = inWater;
-
-        if (currentSprites == spriteUp || currentSprites == spriteWaterUp)
-            ChangeSprites(isInWater ? spriteWaterUp : spriteUp);
-        else if (currentSprites == spriteDown || currentSprites == spriteWaterDown)
-            ChangeSprites(isInWater ? spriteWaterDown : spriteDown);
-        else if (currentSprites == spriteLeft || currentSprites == spriteWaterLeft)
-            ChangeSprites(isInWater ? spriteWaterLeft : spriteLeft);
-        else if (currentSprites == spriteRight || currentSprites == spriteWaterRight)
-            ChangeSprites(isInWater ? spriteWaterRight : spriteRight);
-    }
-
-    private IEnumerator DeathSequence(bool isWaterDeath)
+    private IEnumerator DeathSequence()
     {
         isDead = true;
         velocity = Vector2.zero;
@@ -179,7 +148,7 @@ public class PlayerController : MonoBehaviour
             if (automaticBgm != null) automaticBgm.Stop();
         }
 
-        StartCoroutine(PlayDeathAnimationRoutine(isWaterDeath));
+        StartCoroutine(PlayDeathAnimationRoutine());
 
         yield return StartCoroutine(FadeInGameOverPanel(2f));
         yield return new WaitForSeconds(0.1f);
@@ -195,11 +164,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayDeathAnimationRoutine(bool isWaterDeath)
+    private IEnumerator PlayDeathAnimationRoutine()
     {
         int deathFrameIndex = 0;
-
-        Sprite[] targetSprites = isWaterDeath ? spriteWaterDeath : spriteNormalDeath;
+        Sprite[] targetSprites = spriteNormalDeath;
 
         while (isDead)
         {

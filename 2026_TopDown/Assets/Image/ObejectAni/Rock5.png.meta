@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 8249d834f7963a34aa4acf79a663fec0
+guid: e17455bc8c03cbd4e959ae1e1f9f258e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5785984467274611408
-    second: "Charactwe_\uBB3C\uC18D\uC624\uB978\uCABD3_0"
+      213: 7050584551464558742
+    second: Rock5_0
+  - first:
+      213: 4129335493490042373
+    second: Rock5_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1000
+  spritePixelsToUnits: 2000
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Charactwe_\uBB3C\uC18D\uC624\uB978\uCABD3_0"
+      name: Rock5_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 0
-        width: 160
-        height: 160
+        width: 292
+        height: 231
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0354b2058cd04bfa0800000000000000
-      internalID: -5785984467274611408
+      spriteID: 690e6e04b45b8d160800000000000000
+      internalID: 7050584551464558742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rock5_1
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 169
+        width: 82
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 506e2efc0c85e4930800000000000000
+      internalID: 4129335493490042373
       vertices: []
       indices: 
       edges: []
@@ -148,7 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Charactwe_\uBB3C\uC18D\uC624\uB978\uCABD3_0": -5785984467274611408
+      Rock5_0: 7050584551464558742
+      Rock5_1: 4129335493490042373
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

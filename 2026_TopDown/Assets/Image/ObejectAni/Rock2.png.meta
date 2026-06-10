@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4c0ec148f3c03ef4dbcb171ae7100ce5
+guid: a6f233c800c105c4495187a4a9fbc7fa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 387708036146801702
-    second: "Character_\uBB3C\uC18D\uB4B7\uBA742_0"
+      213: -5937200866895562579
+    second: Rock2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1000
+  spritePixelsToUnits: 2000
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Character_\uBB3C\uC18D\uB4B7\uBA742_0"
+      name: Rock2_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 9
         y: 0
-        width: 160
-        height: 160
+        width: 302
+        height: 320
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 62c281b976a616500800000000000000
-      internalID: 387708036146801702
+      spriteID: da87c88a443da9da0800000000000000
+      internalID: -5937200866895562579
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Character_\uBB3C\uC18D\uB4B7\uBA742_0": 387708036146801702
+      Rock2_0: -5937200866895562579
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

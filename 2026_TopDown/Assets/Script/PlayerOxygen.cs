@@ -95,7 +95,7 @@ public class PlayerOxygen : MonoBehaviour
 
         if (playerHealth != null)
         {
-            playerHealth.TakeDamage(9999, false);
+            playerHealth.TakeDamage(9999);
         }
     }
 

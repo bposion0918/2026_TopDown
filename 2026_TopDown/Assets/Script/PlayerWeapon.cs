@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    [Header("무기 설정")]
+    [Header("Weapon Settings")]
     public int damage = 5;
-    public float knockbackPower = 10f; // 넉백 파워(밀어내는 힘) 추가!
+    public float knockbackPower = 10f;
+    public bool isFullyCharged = false; // Added: Full charge check
 
     private List<Collider2D> alreadyHitEnemies = new List<Collider2D>();
-    private Transform playerTransform; // 플레이어의 위치를 알기 위한 변수
+    private Transform playerTransform;
 
     private void Awake()
     {
-        // 무기의 부모(플레이어) 위치를 자동으로 찾아옵니다.
         playerTransform = GetComponentInParent<PlayerController>().transform;
     }
 
@@ -23,6 +23,7 @@ public class PlayerWeapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 1. Enemy Hit Logic
         if (collision.CompareTag("Enemy"))
         {
             if (alreadyHitEnemies.Contains(collision)) return;
@@ -31,11 +32,30 @@ public class PlayerWeapon : MonoBehaviour
 
             if (enemyHealth != null)
             {
-                // 넉백 방향 계산 (몬스터 위치 - 플레이어 위치 = 플레이어에서 몬스터로 향하는 방향)
                 Vector2 knockbackDir = (collision.transform.position - playerTransform.position).normalized;
-
-                // 데미지를 줄 때 방향과 힘도 같이 넘겨줍니다!
                 enemyHealth.TakeDamage(damage, knockbackDir, knockbackPower);
+                alreadyHitEnemies.Add(collision);
+            }
+        }
+        // 2. Rock Hit Logic
+        else if (collision.CompareTag("Rock"))
+        {
+            if (alreadyHitEnemies.Contains(collision)) return;
+
+            BreakableRock rock = collision.GetComponent<BreakableRock>();
+
+            if (rock != null)
+            {
+                // Only damage the rock if the attack is fully charged
+                if (isFullyCharged)
+                {
+                    rock.TakeDamage(1);
+                    Debug.Log("Rock Damaged!");
+                }
+                else
+                {
+                    Debug.Log("Attack is not fully charged. Rock deflected the attack.");
+                }
 
                 alreadyHitEnemies.Add(collision);
             }

@@ -152,13 +152,18 @@ public class PlayerAttack : MonoBehaviour
 
             int chargeLevel = Mathf.FloorToInt(currentChargeTime / chargeInterval);
             float damageMultiplier = 1.0f + (chargeLevel * damageBonusPerInterval);
-            // 1. 일단 20%씩 증가한 기본 데미지를 계산합니다.
             int finalDamage = Mathf.RoundToInt(originalBaseDamage * damageMultiplier);
 
-            // 🌟 2. 만약 5초(최대치)까지 끝까지 모았다면, 막대한 보너스 배율을 곱해줍니다!
+            // 무기 초기화: 기본적으로는 풀차지가 아니라고 설정
+            playerWeaponScript.isFullyCharged = false;
+
             if (currentChargeTime >= maxChargeTime)
             {
                 finalDamage = Mathf.RoundToInt(finalDamage * maxChargeBonus);
+
+                // 풀차지를 달성했다면 무기에게 상태를 전달!
+                playerWeaponScript.isFullyCharged = true;
+
                 Debug.Log("🔥 [풀 차지 보너스 발동!] 데미지 3배 증폭!");
             }
 

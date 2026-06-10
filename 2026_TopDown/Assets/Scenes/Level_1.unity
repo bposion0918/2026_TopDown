@@ -4413,35 +4413,12 @@ MonoBehaviour:
   - {fileID: 3679603658388973640, guid: f56dc412011e9154a8e9ad9ed90b0b69, type: 3}
   - {fileID: 8955262675404758898, guid: 5283d3c3913c5e24abb669896f688d4c, type: 3}
   - {fileID: -7723599563084649669, guid: e9c3ef49322e43447b043421d6b60199, type: 3}
-  spriteWaterUp:
-  - {fileID: -6841956867845288112, guid: 911e1c616a76a05419c7fe8b9716bbd5, type: 3}
-  - {fileID: 387708036146801702, guid: 4c0ec148f3c03ef4dbcb171ae7100ce5, type: 3}
-  - {fileID: 9141543676518359379, guid: 7047894e9f0506241abefa3ec2a6364e, type: 3}
-  spriteWaterDown:
-  - {fileID: -2248764487488823503, guid: 7eee456f5afda164ab2f2cbc26c6369c, type: 3}
-  - {fileID: 1866026077987076114, guid: 08cc21ca39f584644ad118fcde51721f, type: 3}
-  - {fileID: 5565989405369116277, guid: 1b920728797c1824c9e052b286123c35, type: 3}
-  spriteWaterLeft:
-  - {fileID: 7949060275451961586, guid: f3594c30e3ce6d9459292b5b089f9e39, type: 3}
-  - {fileID: -6393030681000988103, guid: 48c7975df2b32804eb5e008ffecc1485, type: 3}
-  - {fileID: 41610736212753404, guid: 3ae834a3136c555429d296074a312baf, type: 3}
-  spriteWaterRight:
-  - {fileID: 653937619704586037, guid: e3eeababce52a624b806aec33a4b8d2d, type: 3}
-  - {fileID: 2665709611268480870, guid: 7c54b061fffc7d442abee063a9e1b411, type: 3}
-  - {fileID: -5785984467274611408, guid: 8249d834f7963a34aa4acf79a663fec0, type: 3}
-  spriteWaterDeath:
-  - {fileID: 21300000, guid: 62baeff59245d9441a8071cbb5d86cac, type: 3}
-  - {fileID: 21300000, guid: 36649ed4ebfbdc24bbb74e27ed8766fa, type: 3}
-  - {fileID: 21300000, guid: 4d471485970f99c46860822763115dc5, type: 3}
-  - {fileID: 21300000, guid: 795744437626a6640998d5686c6f6706, type: 3}
   spriteNormalDeath:
-  - {fileID: -53857484548215661, guid: 6b0a8e1baf2954d46b4bd5bd14926ad2, type: 3}
-  - {fileID: -7658501535791666613, guid: 5864ab26b9ae9c641a3bac5648bd80c9, type: 3}
-  - {fileID: -7286260184060895466, guid: 9dc39a8dd3b77f84a81bbe26115c87b2, type: 3}
-  - {fileID: 3331439490796452460, guid: f105c6ce551f2a74a900ff263e5f7863, type: 3}
-  - {fileID: -9141113724640864157, guid: 33cdb4bed1bbf81479c6720549b9d15e, type: 3}
-  - {fileID: 6606304382982646941, guid: a6845f4bbcbf23940b38f2c40541f2a9, type: 3}
-  - {fileID: 4829045821962075396, guid: 3bd452e1d2249f44cbb3260bf0aaad4c, type: 3}
+  - {fileID: -968461224823759473, guid: dd0ef977a7885fb44b8acccdd2e3515f, type: 3}
+  - {fileID: -8587860046845362899, guid: 497671b947ad6a7488325a10c62b750b, type: 3}
+  - {fileID: -8452623334408967993, guid: 604298f8f61860041ac38886b49bfe5a, type: 3}
+  - {fileID: 2203606929526745045, guid: 3c86621e9e13ec84d90b628c26bc4e49, type: 3}
+  - {fileID: -8195806525172014528, guid: ef8c868435bc14e42ab41cfcd2346b9e, type: 3}
   gameOverPanel: {fileID: 192075358}
   bgmAudioSource: {fileID: 2141511800}
   isDead: 0
@@ -4610,7 +4587,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 6
   currentHealth: 0
-  waterDamageInterval: 0.5
   healthUI: {fileID: 966338981}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
@@ -4658,7 +4634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe6cbb357db9a34d9aa31b681383304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOxygen
-  maxOxygen: 100
+  maxOxygen: 200
   currentOxygen: 0
   depletionRate: 1
   oxygenUIImage: {fileID: 1582793565}
@@ -5204,6 +5180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeapon
   damage: 5
   knockbackPower: 1
+  isFullyCharged: 0
 --- !u!1 &2034506525
 GameObject:
   m_ObjectHideFlags: 0

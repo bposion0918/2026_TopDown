@@ -1,6 +1,7 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class PlayerOxygen : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerOxygen : MonoBehaviour
     [Header("UI Settings")]
     public Image oxygenUIImage;
     public Sprite[] oxygenSprites;
+    public TextMeshProUGUI oxygenText;
 
     private bool isDead = false;
     private PlayerHealth playerHealth;
@@ -79,12 +81,23 @@ public class PlayerOxygen : MonoBehaviour
 
     private void UpdateOxygenUI()
     {
+        float percentage = currentOxygen / maxOxygen;
+
         if (oxygenUIImage != null && oxygenSprites != null && oxygenSprites.Length == 11)
         {
-            float percentage = currentOxygen / maxOxygen;
             int spriteIndex = Mathf.CeilToInt(percentage * 10f);
             spriteIndex = Mathf.Clamp(spriteIndex, 0, 10);
             oxygenUIImage.sprite = oxygenSprites[spriteIndex];
+
+        }
+        if (oxygenText != null)
+        {
+            // 퍼센트를 0~100 사이의 정수로 변환합니다.
+            int displayPercent = Mathf.CeilToInt(percentage * 100f);
+            displayPercent = Mathf.Clamp(displayPercent, 0, 100);
+
+            // 수정된 부분: <sub> </sub> 태그를 사용하여 숫자 2를 아래첨자로 만듭니다.
+            oxygenText.text = $"O<sub>2</sub> : {displayPercent}%";
         }
     }
 

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 9220788310601415220}
   - component: {fileID: 5662040201584245028}
   - component: {fileID: 374881167185573829}
-  - component: {fileID: 7611819673864022561}
+  - component: {fileID: -7648180312270616944}
   m_Layer: 0
-  m_Name: Coin
+  m_Name: Oxygan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,7 +129,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.0024988204}
   m_Radius: 0.13267191
---- !u!114 &7611819673864022561
+--- !u!114 &-7648180312270616944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4243660146326868250}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c85b435361ed037469e8e8e0cf0c8efd, type: 3}
+  m_Script: {fileID: 11500000, guid: cf12c1316af56bb499cf30c8af71c3e4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CoinItem
-  coinValue: 1
+  m_EditorClassIdentifier: Assembly-CSharp::OxygenItem
+  restorePercentage: 20

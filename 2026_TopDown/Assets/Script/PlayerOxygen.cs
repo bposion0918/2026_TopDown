@@ -12,7 +12,7 @@ public class PlayerOxygen : MonoBehaviour
 
     [Header("UI Settings")]
     public Image oxygenFillImage;
-    public GameObject oxygenBackground; // 추가: 빈 폐 배경 오브젝트
+    public GameObject oxygenBackground;
     public TextMeshProUGUI oxygenText;
 
     [Header("Blink Settings")]
@@ -85,6 +85,24 @@ public class PlayerOxygen : MonoBehaviour
         UpdateOxygenUI();
     }
 
+    // [새로 추가된 기능] 산소 아이템을 먹었을 때 회복시켜주는 함수
+    public void AddOxygenByPercentage(float percent)
+    {
+        if (isDead) return;
+
+        float addAmount = maxOxygen * (percent / 100f);
+        currentOxygen += addAmount;
+
+        // 산소가 최대치를 넘지 않도록 제한
+        if (currentOxygen > maxOxygen)
+        {
+            currentOxygen = maxOxygen;
+        }
+
+        Debug.Log($"산소 회복! {percent}% ({addAmount}) 증가. 현재 산소: {currentOxygen}");
+        UpdateOxygenUI();
+    }
+
     private void UpdateOxygenUI()
     {
         float percentage = currentOxygen / maxOxygen;
@@ -148,7 +166,6 @@ public class PlayerOxygen : MonoBehaviour
             elapsedTime += Time.deltaTime;
             Vector3 currentScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / pulseDuration);
 
-            // 게이지와 배경의 크기를 동시에 늘립니다.
             if (oxygenFillImage != null) oxygenFillImage.transform.localScale = currentScale;
             if (oxygenBackground != null) oxygenBackground.transform.localScale = currentScale;
 
@@ -161,7 +178,6 @@ public class PlayerOxygen : MonoBehaviour
             elapsedTime += Time.deltaTime;
             Vector3 currentScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / pulseDuration);
 
-            // 게이지와 배경의 크기를 동시에 줄입니다.
             if (oxygenFillImage != null) oxygenFillImage.transform.localScale = currentScale;
             if (oxygenBackground != null) oxygenBackground.transform.localScale = currentScale;
 

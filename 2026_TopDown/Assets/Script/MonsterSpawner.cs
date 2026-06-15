@@ -18,8 +18,13 @@ public class MonsterSpawner : MonoBehaviour
     private bool isRoomLocked = false;
     private bool isCleared = false;
 
+    // [추가] 방 보상을 지급할 스크립트 변수
+    private RoomReward roomReward;
+
     void Start()
     {
+        roomReward = GetComponentInParent<RoomReward>();
+
         SpawnMonsters();
 
         // 소환된 몬스터가 한 마리도 없다면 처음부터 클리어된 방으로 취급합니다.
@@ -78,10 +83,20 @@ public class MonsterSpawner : MonoBehaviour
             // 리스트에서 체력이 0이 되어 삭제된(null) 몬스터들을 명부에서 솎아냅니다.
             spawnedMonsters.RemoveAll(monster => monster == null);
 
-            // 남은 몬스터가 0마리라면 문을 개방!
+            // 남은 몬스터가 0마리라면 문을 개방하고 보상을 지급합니다!
             if (spawnedMonsters.Count == 0)
             {
                 UnlockDoors();
+
+                // 코인 보상 지급 로직 실행
+                if (roomReward != null)
+                {
+                    roomReward.DropReward();
+                }
+                else
+                {
+                    Debug.LogError("에러: MonsterSpawner가 RoomReward 스크립트를 찾지 못했습니다! (프리팹에 잘 붙어있는지 확인하세요)");
+                }
             }
         }
     }

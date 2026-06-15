@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("공격 설정")]
     public float attackDuration = 0.5f;
-    public float fastAttackDuration = 0.2f; // 80% 이상 차지 시 적용되는 빠른 공격 속도
+    public float fastAttackDuration = 0.2f;
     public float attackCooldown = 1.0f;
     public float weaponLingerTime = 0.3f;
     public float swingAngle = 60f;
@@ -29,14 +29,21 @@ public class PlayerAttack : MonoBehaviour
     public GameObject chargeGaugeBackground;
     public Color[] gaugeColors;
 
-    [Header("게이지 흔들림 설정")]
+    [Header("게이지 효과 (흔들림 및 반짝임)")]
     public float shakeThreshold = 0.8f;
     public float shakeAmount = 2f;
+    public Color flashColor = Color.white;  // 100% 도달 시 반짝일 색상
+    public float flashDuration = 0.05f;     // 반짝이는 속도
+    public int flashCount = 3;              // 반짝이는 횟수
 
     private RectTransform gaugeRect;
     private RectTransform bgRect;
     private Vector2 originalGaugePos;
     private Vector2 originalBgPos;
+
+    // 반짝임 제어를 위한 변수들
+    private bool hasFlashedMax = false;
+    private bool isFlashing = false;
 
     [Header("무기 각도 보정")]
     public float angleOffset = 90f;
@@ -88,9 +95,17 @@ public class PlayerAttack : MonoBehaviour
         {
             currentChargeTime += Time.deltaTime;
 
-            if (currentChargeTime > maxChargeTime)
+            // 100% 도달 체크
+            if (currentChargeTime >= maxChargeTime)
             {
                 currentChargeTime = maxChargeTime;
+
+                // 100%가 되는 순간 딱 한 번만 반짝임 코루틴을 실행합니다.
+                if (!hasFlashedMax)
+                {
+                    hasFlashedMax = true;
+                    StartCoroutine(MaxChargeFlashRoutine());
+                }
             }
 
             int currentLevel = Mathf.FloorToInt(currentChargeTime / chargeInterval);
@@ -121,12 +136,40 @@ public class PlayerAttack : MonoBehaviour
         {
             chargeGaugeImage.fillAmount = percentage;
 
-            if (gaugeColors != null && gaugeColors.Length > 0)
+            // 반짝임 효과 중이 아닐 때만 원래 설정한 단계별 색상을 유지합니다.
+            if (!isFlashing && gaugeColors != null && gaugeColors.Length > 0)
             {
                 int colorIndex = Mathf.Clamp(level, 0, gaugeColors.Length - 1);
                 chargeGaugeImage.color = gaugeColors[colorIndex];
             }
         }
+    }
+
+    // 100% 도달 시 하얀색으로 빠르게 깜빡이는 코루틴
+    private IEnumerator MaxChargeFlashRoutine()
+    {
+        isFlashing = true;
+
+        // 가장 마지막 단계의 색상을 미리 기억해둡니다.
+        int maxLevel = Mathf.FloorToInt(maxChargeTime / chargeInterval);
+        Color originalColor = Color.white;
+        if (gaugeColors != null && gaugeColors.Length > 0)
+        {
+            int colorIndex = Mathf.Clamp(maxLevel, 0, gaugeColors.Length - 1);
+            originalColor = gaugeColors[colorIndex];
+        }
+
+        // 설정한 횟수만큼 하얀색과 원래 색상을 오가며 깜빡입니다.
+        for (int i = 0; i < flashCount; i++)
+        {
+            if (chargeGaugeImage != null) chargeGaugeImage.color = flashColor;
+            yield return new WaitForSeconds(flashDuration);
+
+            if (chargeGaugeImage != null) chargeGaugeImage.color = originalColor;
+            yield return new WaitForSeconds(flashDuration);
+        }
+
+        isFlashing = false;
     }
 
     private void HandleGaugeShake(float percentage)
@@ -159,6 +202,10 @@ public class PlayerAttack : MonoBehaviour
                 isCharging = true;
                 currentChargeTime = 0f;
                 lastLoggedLevel = 0;
+
+                // 마우스를 눌러 새로운 공격을 시작할 때 반짝임 변수들도 초기화합니다.
+                hasFlashedMax = false;
+                isFlashing = false;
 
                 if (gaugeRect != null) originalGaugePos = gaugeRect.anchoredPosition;
                 if (bgRect != null) originalBgPos = bgRect.anchoredPosition;
@@ -205,7 +252,6 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         canAttack = false;
 
-        // 실제 휘두르는 시간 변수 생성 (기본값 설정)
         float currentAttackDuration = attackDuration;
 
         if (playerWeaponScript != null)
@@ -223,13 +269,13 @@ public class PlayerAttack : MonoBehaviour
             {
                 finalDamage = Mathf.RoundToInt(finalDamage * maxChargeBonus);
                 playerWeaponScript.isFullyCharged = true;
-                currentAttackDuration = fastAttackDuration; // 100% 도달 시 스윙 속도 상승
+                currentAttackDuration = fastAttackDuration;
                 Debug.Log("[풀 차지 보너스 발동!] 데미지 3배 증폭 & 공격 속도 상승!");
             }
             else if (percentage >= shakeThreshold)
             {
                 finalDamage = Mathf.RoundToInt(finalDamage * highChargeBonus);
-                currentAttackDuration = fastAttackDuration; // 80% 이상 시 스윙 속도 상승
+                currentAttackDuration = fastAttackDuration;
                 Debug.Log("[고출력 차지 보너스 발동!] 데미지 1.5배 증폭 & 공격 속도 상승!");
             }
 
@@ -246,7 +292,6 @@ public class PlayerAttack : MonoBehaviour
 
         float elapsedTime = 0f;
 
-        // 동적으로 변한 currentAttackDuration 을 기준으로 무기를 회전시킵니다.
         while (elapsedTime < currentAttackDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -262,7 +307,6 @@ public class PlayerAttack : MonoBehaviour
         weaponObject.SetActive(false);
         isAttacking = false;
 
-        // 쿨타임 계산 시에도 변경된 스윙 시간을 적용하여 자연스럽게 남은 대기 시간을 계산합니다.
         float remainingCooldown = attackCooldown - (currentAttackDuration + weaponLingerTime);
         if (remainingCooldown > 0)
         {

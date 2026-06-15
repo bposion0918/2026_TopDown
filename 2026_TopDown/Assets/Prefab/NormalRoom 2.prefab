@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomReward
   coinPrefab: {fileID: 4243660146326868250, guid: fec240f4bdd29c842ba5f91d065bc31c, type: 3}
+  oxygenPrefab: {fileID: 0}
   mapCenterPoint: {fileID: 6010747500506152965}
 --- !u!1 &1159797985312961434
 GameObject:
@@ -5798,7 +5799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   monsterPrefabs:
   - {fileID: 8641641059305245140, guid: 84bd6beefccf4074ab6f72748f3ab45c, type: 3}
-  minMonsters: 2
+  minMonsters: 3
   maxMonsters: 5
   spawnAreaSize: {x: 1.8, y: 0.9}
   doorsInRoom:

@@ -11,9 +11,15 @@ public class PlayerOxygen : MonoBehaviour
     public float depletionRate = 1f;
 
     [Header("UI Settings")]
-    public Image oxygenUIImage;
-    public Sprite[] oxygenSprites;
+    public Image oxygenFillImage;
+    public GameObject oxygenBackground; // 추가: 빈 폐 배경 오브젝트
     public TextMeshProUGUI oxygenText;
+
+    [Header("Blink Settings")]
+    public float blinkThreshold = 0.2f;
+    public float blinkSpeed = 2f;
+    public Color normalColor = Color.white;
+    public Color darkColor = new Color(0.3f, 0.3f, 0.3f, 1f);
 
     private bool isDead = false;
     private PlayerHealth playerHealth;
@@ -27,9 +33,10 @@ public class PlayerOxygen : MonoBehaviour
         currentOxygen = maxOxygen;
         playerHealth = GetComponent<PlayerHealth>();
 
-        if (oxygenUIImage != null)
+        if (oxygenFillImage != null)
         {
-            originalScale = oxygenUIImage.transform.localScale;
+            oxygenFillImage.color = normalColor;
+            originalScale = oxygenFillImage.transform.localScale;
         }
     }
 
@@ -46,25 +53,24 @@ public class PlayerOxygen : MonoBehaviour
         }
 
         UpdateOxygenUI();
+        HandleBlinking();
 
         pulseTimer += Time.deltaTime;
         if (pulseTimer >= 1f)
         {
             pulseTimer -= 1f;
 
-            if (oxygenUIImage != null && !isPulsing)
+            if (oxygenFillImage != null && !isPulsing)
             {
                 StartCoroutine(PulseRoutine());
             }
         }
     }
 
-    // 외부(PlayerHealth)에서 산소를 퍼센트 단위로 깎을 때 부르는 함수
     public void ReduceOxygenByPercentage(float percent)
     {
         if (isDead) return;
 
-        // 최대 산소량 기준으로 퍼센트만큼 깎을 양을 계산합니다 (예: 100의 10% = 10)
         float dropAmount = maxOxygen * (percent / 100f);
         currentOxygen -= dropAmount;
 
@@ -76,28 +82,40 @@ public class PlayerOxygen : MonoBehaviour
             DieFromLackOfOxygen();
         }
 
-        UpdateOxygenUI(); // 깎인 직후 UI를 즉시 업데이트
+        UpdateOxygenUI();
     }
 
     private void UpdateOxygenUI()
     {
         float percentage = currentOxygen / maxOxygen;
 
-        if (oxygenUIImage != null && oxygenSprites != null && oxygenSprites.Length == 11)
+        if (oxygenFillImage != null)
         {
-            int spriteIndex = Mathf.CeilToInt(percentage * 10f);
-            spriteIndex = Mathf.Clamp(spriteIndex, 0, 10);
-            oxygenUIImage.sprite = oxygenSprites[spriteIndex];
-
+            oxygenFillImage.fillAmount = percentage;
         }
+
         if (oxygenText != null)
         {
-            // 퍼센트를 0~100 사이의 정수로 변환합니다.
             int displayPercent = Mathf.CeilToInt(percentage * 100f);
             displayPercent = Mathf.Clamp(displayPercent, 0, 100);
-
-            // 수정된 부분: <sub> </sub> 태그를 사용하여 숫자 2를 아래첨자로 만듭니다.
             oxygenText.text = $"O<sub>2</sub> : {displayPercent}%";
+        }
+    }
+
+    private void HandleBlinking()
+    {
+        if (oxygenFillImage == null) return;
+
+        float percentage = currentOxygen / maxOxygen;
+
+        if (percentage <= blinkThreshold && currentOxygen > 0)
+        {
+            float lerpTime = Mathf.PingPong(Time.time * blinkSpeed, 1f);
+            oxygenFillImage.color = Color.Lerp(darkColor, normalColor, lerpTime);
+        }
+        else
+        {
+            oxygenFillImage.color = normalColor;
         }
     }
 
@@ -109,6 +127,11 @@ public class PlayerOxygen : MonoBehaviour
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(9999);
+        }
+
+        if (oxygenFillImage != null)
+        {
+            oxygenFillImage.color = darkColor;
         }
     }
 
@@ -123,7 +146,12 @@ public class PlayerOxygen : MonoBehaviour
         while (elapsedTime < pulseDuration)
         {
             elapsedTime += Time.deltaTime;
-            oxygenUIImage.transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / pulseDuration);
+            Vector3 currentScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / pulseDuration);
+
+            // 게이지와 배경의 크기를 동시에 늘립니다.
+            if (oxygenFillImage != null) oxygenFillImage.transform.localScale = currentScale;
+            if (oxygenBackground != null) oxygenBackground.transform.localScale = currentScale;
+
             yield return null;
         }
 
@@ -131,11 +159,17 @@ public class PlayerOxygen : MonoBehaviour
         while (elapsedTime < pulseDuration)
         {
             elapsedTime += Time.deltaTime;
-            oxygenUIImage.transform.localScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / pulseDuration);
+            Vector3 currentScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / pulseDuration);
+
+            // 게이지와 배경의 크기를 동시에 줄입니다.
+            if (oxygenFillImage != null) oxygenFillImage.transform.localScale = currentScale;
+            if (oxygenBackground != null) oxygenBackground.transform.localScale = currentScale;
+
             yield return null;
         }
 
-        oxygenUIImage.transform.localScale = originalScale;
+        if (oxygenFillImage != null) oxygenFillImage.transform.localScale = originalScale;
+        if (oxygenBackground != null) oxygenBackground.transform.localScale = originalScale;
 
         isPulsing = false;
     }

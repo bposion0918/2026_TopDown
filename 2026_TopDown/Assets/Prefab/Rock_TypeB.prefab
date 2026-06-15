@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1889967424886801034}
   - component: {fileID: 3426970017819183338}
   - component: {fileID: 4661161392618037615}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rock_TypeB
   m_TagString: Rock
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0002592355, y: -0.0075176135}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -137,7 +137,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.15043576, y: 0.16089544}
+  m_Size: {x: 0.13954818, y: 0.14586021}
   m_EdgeRadius: 0
 --- !u!114 &4661161392618037615
 MonoBehaviour:

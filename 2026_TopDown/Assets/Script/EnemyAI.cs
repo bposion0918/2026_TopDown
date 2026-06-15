@@ -3,17 +3,29 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
     [Header("이동 및 추적 설정")]
-    public float moveSpeed = 1.5f;       // 슬라임의 이동 속도
-    public float detectionRange = 15f;   // 플레이어 감지 범위
+    public float moveSpeed = 1.5f;
+    public float detectionRange = 15f;
+
+    [Header("지능형 장애물 회피 (레이더 스캔)")]
+    public LayerMask obstacleLayer;
+    public float avoidDistance = 0.8f;   // 앞을 내다보는 사거리 (바위를 감지할 거리)
+    public float castRadius = 0.2f;      // 몬스터 몸통 두께 (콜라이더보다 약간 작게 설정)
+
+    [Header("몬스터 겹침 방지 (밀어내기)")]
+    public LayerMask enemyLayer;
+    public float separationRadius = 0.6f;
+    public float separationPower = 0.5f;
 
     [Header("애니메이션 설정")]
-    public Sprite[] moveSprites;         //  움직일 때 반복할 슬라임 이미지들
-    public float frameTime = 0.15f;      //  이미지가 바뀌는 속도
+    public Sprite[] moveSprites;
+    public float frameTime = 0.15f;
 
     private Transform player;
     private Rigidbody2D rb;
-    private SpriteRenderer sr;           // 좌우 반전(flip)과 이미지를 바꿀 컴포넌트
-    private Vector2 movement;
+    private SpriteRenderer sr;
+
+    private Vector2 currentMoveDir;
+    private float lastDodgeSign = 1f;    // 우회 방향 기억 변수 (1 = 우측, -1 = 좌측)
 
     private int frameIndex = 0;
     private float timer = 0f;
@@ -21,7 +33,7 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>(); // 시작할 때 SpriteRenderer를 찾아옵니다.
+        sr = GetComponent<SpriteRenderer>();
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -38,27 +50,90 @@ public class EnemyAI : MonoBehaviour
 
         if (distanceToPlayer <= detectionRange)
         {
-            Vector3 direction = (player.position - transform.position).normalized;
-            movement = direction;
+            Vector2 dirToPlayer = (player.position - transform.position).normalized;
+            Vector2 bestDir = dirToPlayer;
+            bool pathFound = false;
 
-            // 1. 방향 바라보기 (좌우 반전)
-            if (movement.x < 0)
+            // 1. 레이더 스캔: 정면(0도)부터 90도까지 각도를 넓혀가며 뚫린 길을 찾습니다.
+            float[] scanAngles = { 0f, 15f, 30f, 45f, 60f, 75f, 90f };
+
+            foreach (float angle in scanAngles)
             {
-                sr.flipX = true;  // 플레이어가 왼쪽에 있으면 이미지 좌우 뒤집기
-            }
-            else if (movement.x > 0)
-            {
-                sr.flipX = false; // 플레이어가 오른쪽에 있으면 원본 방향 보기
+                // 이전에 피했던 방향(좌 또는 우)을 우선적으로 검사합니다.
+                Vector2 checkDir1 = Quaternion.Euler(0, 0, angle * lastDodgeSign) * dirToPlayer;
+                RaycastHit2D hit1 = Physics2D.CircleCast(transform.position, castRadius, checkDir1, avoidDistance, obstacleLayer);
+
+                if (hit1.collider == null)
+                {
+                    bestDir = checkDir1;
+                    pathFound = true;
+                    // 방향을 틀었다면 그 방향(부호)을 기억합니다.
+                    if (angle != 0f) lastDodgeSign = Mathf.Sign(angle * lastDodgeSign);
+                    break;
+                }
+
+                // 우선했던 방향이 막혔다면 반대쪽 방향도 검사합니다.
+                if (angle != 0f)
+                {
+                    Vector2 checkDir2 = Quaternion.Euler(0, 0, -angle * lastDodgeSign) * dirToPlayer;
+                    RaycastHit2D hit2 = Physics2D.CircleCast(transform.position, castRadius, checkDir2, avoidDistance, obstacleLayer);
+
+                    if (hit2.collider == null)
+                    {
+                        bestDir = checkDir2;
+                        pathFound = true;
+                        // 반대쪽이 뚫렸으므로 기억하는 우회 방향을 반대로 뒤집습니다.
+                        lastDodgeSign = Mathf.Sign(-angle * lastDodgeSign);
+                        break;
+                    }
+                }
             }
 
-            // 2. 움직일 때 애니메이션 재생
+            // 사방이 완전히 막힌 최악의 경우, 제자리에 멈추지 않고 억지로라도 플레이어 쪽으로 밀어붙입니다.
+            if (!pathFound)
+            {
+                bestDir = dirToPlayer;
+            }
+
+            // 2. 몬스터 겹침 방지 연산
+            Vector2 separationForce = Vector2.zero;
+            Collider2D[] nearbyEnemies = Physics2D.OverlapCircleAll(transform.position, separationRadius, enemyLayer);
+
+            foreach (Collider2D enemy in nearbyEnemies)
+            {
+                if (enemy.gameObject != gameObject)
+                {
+                    Vector2 pushDir = transform.position - enemy.transform.position;
+                    float dist = pushDir.magnitude;
+                    if (dist > 0)
+                    {
+                        separationForce += pushDir.normalized / dist;
+                    }
+                }
+            }
+
+            bestDir += separationForce * separationPower;
+            bestDir.Normalize();
+
+            // 3. 부드러운 방향 전환 (Lerp)
+            currentMoveDir = Vector2.Lerp(currentMoveDir, bestDir, Time.deltaTime * 8f).normalized;
+
+            // 4. 애니메이션 좌우 반전 처리
+            if (currentMoveDir.x < -0.1f)
+            {
+                sr.flipX = true;
+            }
+            else if (currentMoveDir.x > 0.1f)
+            {
+                sr.flipX = false;
+            }
+
             AnimateSlime();
         }
         else
         {
-            movement = Vector2.zero;
+            currentMoveDir = Vector2.zero;
 
-            // 플레이어를 놓쳐서 멈춰있을 때는 기본(첫 번째) 모습으로 돌아갑니다.
             if (moveSprites != null && moveSprites.Length > 0)
             {
                 sr.sprite = moveSprites[0];
@@ -68,10 +143,9 @@ public class EnemyAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = movement * moveSpeed;
+        rb.linearVelocity = currentMoveDir * moveSpeed;
     }
 
-    // 슬라임의 이미지를 순서대로 반복해서 바꿔주는 함수
     private void AnimateSlime()
     {
         if (moveSprites == null || moveSprites.Length == 0) return;
@@ -82,7 +156,6 @@ public class EnemyAI : MonoBehaviour
             timer = 0f;
             frameIndex++;
 
-            // 준비된 이미지를 다 보여줬으면 다시 처음(0번)으로 돌아갑니다.
             if (frameIndex >= moveSprites.Length)
             {
                 frameIndex = 0;

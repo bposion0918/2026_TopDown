@@ -5,8 +5,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("이동 및 속도")]
-    public float moveSpeed = 2f;
+    [Header("이동 및 속도 (물리 엔진)")]
+    public float maxSpeed = 5f;     // 즉시 도달할 최고 속도
     public float frameTime = 0.15f;
 
     [Header("방향별 애니메이션 스프라이트")]
@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Vector2 input;
-    private Vector2 velocity;
 
     private Sprite[] currentSprites;
     private int frameIndex = 0;
@@ -49,7 +48,6 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
 
         input = value.Get<Vector2>();
-        velocity = input.normalized * moveSpeed;
 
         if (input.sqrMagnitude > 0.01f)
         {
@@ -108,13 +106,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDead)
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+        if (isDead) return;
 
-        rb.linearVelocity = velocity;
+        // 방향키를 누르고 있을 때 가속 없이 즉시 maxSpeed의 속도를 냅니다.
+        if (input.sqrMagnitude > 0.01f)
+        {
+            rb.linearVelocity = input.normalized * maxSpeed;
+        }
+        // 방향키를 떼면 아무것도 하지 않으며, Rigidbody의 Linear Drag 설정에 의해 미끄러지며 멈춥니다.
     }
 
     private void ChangeSprites(Sprite[] newSprites)
@@ -135,7 +134,6 @@ public class PlayerController : MonoBehaviour
     private IEnumerator DeathSequence()
     {
         isDead = true;
-        velocity = Vector2.zero;
         rb.linearVelocity = Vector2.zero;
 
         if (bgmAudioSource != null)

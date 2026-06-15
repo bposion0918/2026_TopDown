@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerAttack : MonoBehaviour
 {
     [Header("공격 설정")]
     public float attackDuration = 0.5f;
+    public float fastAttackDuration = 0.2f; // 80% 이상 차지 시 적용되는 빠른 공격 속도
     public float attackCooldown = 1.0f;
     public float weaponLingerTime = 0.3f;
     public float swingAngle = 60f;
@@ -14,8 +16,7 @@ public class PlayerAttack : MonoBehaviour
     public float maxChargeTime = 5.0f;
     public float chargeInterval = 1.0f;
     public float damageBonusPerInterval = 0.2f;
-
-    // 🌟 새로 추가: 끝까지 모았을 때만 곱해질 폭발적인 보너스 배율
+    public float highChargeBonus = 1.5f;
     public float maxChargeBonus = 3.0f;
 
     private float currentChargeTime = 0f;
@@ -24,8 +25,18 @@ public class PlayerAttack : MonoBehaviour
     private int lastLoggedLevel = 0;
 
     [Header("게이지 UI 설정")]
-    public SpriteRenderer chargeGaugeRenderer; // 👈 게이지를 그려줄 화가(컴포넌트)
-    public Sprite[] chargeSprites;             // 👈 0%, 20%, 40%, 60%, 80%, 100% 이미지 6장
+    public Image chargeGaugeImage;
+    public GameObject chargeGaugeBackground;
+    public Color[] gaugeColors;
+
+    [Header("게이지 흔들림 설정")]
+    public float shakeThreshold = 0.8f;
+    public float shakeAmount = 2f;
+
+    private RectTransform gaugeRect;
+    private RectTransform bgRect;
+    private Vector2 originalGaugePos;
+    private Vector2 originalBgPos;
 
     [Header("무기 각도 보정")]
     public float angleOffset = 90f;
@@ -58,10 +69,16 @@ public class PlayerAttack : MonoBehaviour
 
         weaponObject.SetActive(false);
 
-        // 🌟 게임이 시작될 때는 게이지를 숨겨둡니다.
-        if (chargeGaugeRenderer != null)
+        if (chargeGaugeImage != null)
         {
-            chargeGaugeRenderer.gameObject.SetActive(false);
+            chargeGaugeImage.gameObject.SetActive(false);
+            gaugeRect = chargeGaugeImage.GetComponent<RectTransform>();
+        }
+
+        if (chargeGaugeBackground != null)
+        {
+            chargeGaugeBackground.SetActive(false);
+            bgRect = chargeGaugeBackground.GetComponent<RectTransform>();
         }
     }
 
@@ -77,9 +94,10 @@ public class PlayerAttack : MonoBehaviour
             }
 
             int currentLevel = Mathf.FloorToInt(currentChargeTime / chargeInterval);
+            float percentage = currentChargeTime / maxChargeTime;
 
-            // 🌟 1. 매 프레임마다 현재 단계에 맞는 이미지로 교체합니다.
-            UpdateGaugeUI(currentLevel);
+            UpdateGaugeUI(percentage, currentLevel);
+            HandleGaugeShake(percentage);
 
             if (currentLevel > lastLoggedLevel)
             {
@@ -87,24 +105,46 @@ public class PlayerAttack : MonoBehaviour
 
                 if (currentChargeTime >= maxChargeTime)
                 {
-                    Debug.Log($"🔥 [최대 차지 도달!] {currentLevel}단계 (데미지 +{currentLevel * 20}%)");
+                    Debug.Log($"[최대 차지 도달!] {currentLevel}단계 (데미지 +{currentLevel * 20}%)");
                 }
                 else
                 {
-                    Debug.Log($"⚡ [차지 중...] {currentLevel}단계 (데미지 +{currentLevel * 20}%)");
+                    Debug.Log($"[차지 중...] {currentLevel}단계 (데미지 +{currentLevel * 20}%)");
                 }
             }
         }
     }
 
-    // 🌟 2. 단계(0~5)에 맞춰 준비된 6장의 이미지 중 하나를 꺼내오는 함수
-    private void UpdateGaugeUI(int level)
+    private void UpdateGaugeUI(float percentage, int level)
     {
-        if (chargeGaugeRenderer != null && chargeSprites != null && chargeSprites.Length > 0)
+        if (chargeGaugeImage != null)
         {
-            // 혹시라도 레벨이 배열 크기를 넘어가서 에러가 나지 않도록 안전장치를 겁니다.
-            int spriteIndex = Mathf.Clamp(level, 0, chargeSprites.Length - 1);
-            chargeGaugeRenderer.sprite = chargeSprites[spriteIndex];
+            chargeGaugeImage.fillAmount = percentage;
+
+            if (gaugeColors != null && gaugeColors.Length > 0)
+            {
+                int colorIndex = Mathf.Clamp(level, 0, gaugeColors.Length - 1);
+                chargeGaugeImage.color = gaugeColors[colorIndex];
+            }
+        }
+    }
+
+    private void HandleGaugeShake(float percentage)
+    {
+        if (percentage >= shakeThreshold)
+        {
+            Vector2 randomOffset = Random.insideUnitCircle * shakeAmount;
+
+            if (gaugeRect != null)
+                gaugeRect.anchoredPosition = originalGaugePos + randomOffset;
+
+            if (bgRect != null)
+                bgRect.anchoredPosition = originalBgPos + randomOffset;
+        }
+        else
+        {
+            if (gaugeRect != null) gaugeRect.anchoredPosition = originalGaugePos;
+            if (bgRect != null) bgRect.anchoredPosition = originalBgPos;
         }
     }
 
@@ -120,9 +160,19 @@ public class PlayerAttack : MonoBehaviour
                 currentChargeTime = 0f;
                 lastLoggedLevel = 0;
 
-                // 🌟 3. 마우스를 누르기 시작하면 게이지를 화면에 띄우고 빈칸(0번) 이미지를 넣습니다.
-                if (chargeGaugeRenderer != null) chargeGaugeRenderer.gameObject.SetActive(true);
-                UpdateGaugeUI(0);
+                if (gaugeRect != null) originalGaugePos = gaugeRect.anchoredPosition;
+                if (bgRect != null) originalBgPos = bgRect.anchoredPosition;
+
+                if (chargeGaugeImage != null)
+                {
+                    chargeGaugeImage.gameObject.SetActive(true);
+                }
+                if (chargeGaugeBackground != null)
+                {
+                    chargeGaugeBackground.SetActive(true);
+                }
+
+                UpdateGaugeUI(0f, 0);
 
                 Debug.Log("기 모으기 시작! (0단계)");
             }
@@ -133,8 +183,17 @@ public class PlayerAttack : MonoBehaviour
             {
                 isCharging = false;
 
-                // 🌟 4. 마우스를 떼고 공격이 나가는 순간 게이지를 다시 숨깁니다.
-                if (chargeGaugeRenderer != null) chargeGaugeRenderer.gameObject.SetActive(false);
+                if (gaugeRect != null) gaugeRect.anchoredPosition = originalGaugePos;
+                if (bgRect != null) bgRect.anchoredPosition = originalBgPos;
+
+                if (chargeGaugeImage != null)
+                {
+                    chargeGaugeImage.gameObject.SetActive(false);
+                }
+                if (chargeGaugeBackground != null)
+                {
+                    chargeGaugeBackground.SetActive(false);
+                }
 
                 StartCoroutine(SwingWeaponRoutine());
             }
@@ -146,6 +205,9 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         canAttack = false;
 
+        // 실제 휘두르는 시간 변수 생성 (기본값 설정)
+        float currentAttackDuration = attackDuration;
+
         if (playerWeaponScript != null)
         {
             playerWeaponScript.ClearHitList();
@@ -154,22 +216,26 @@ public class PlayerAttack : MonoBehaviour
             float damageMultiplier = 1.0f + (chargeLevel * damageBonusPerInterval);
             int finalDamage = Mathf.RoundToInt(originalBaseDamage * damageMultiplier);
 
-            // 무기 초기화: 기본적으로는 풀차지가 아니라고 설정
+            float percentage = currentChargeTime / maxChargeTime;
             playerWeaponScript.isFullyCharged = false;
 
-            if (currentChargeTime >= maxChargeTime)
+            if (percentage >= 1.0f)
             {
                 finalDamage = Mathf.RoundToInt(finalDamage * maxChargeBonus);
-
-                // 풀차지를 달성했다면 무기에게 상태를 전달!
                 playerWeaponScript.isFullyCharged = true;
-
-                Debug.Log("🔥 [풀 차지 보너스 발동!] 데미지 3배 증폭!");
+                currentAttackDuration = fastAttackDuration; // 100% 도달 시 스윙 속도 상승
+                Debug.Log("[풀 차지 보너스 발동!] 데미지 3배 증폭 & 공격 속도 상승!");
+            }
+            else if (percentage >= shakeThreshold)
+            {
+                finalDamage = Mathf.RoundToInt(finalDamage * highChargeBonus);
+                currentAttackDuration = fastAttackDuration; // 80% 이상 시 스윙 속도 상승
+                Debug.Log("[고출력 차지 보너스 발동!] 데미지 1.5배 증폭 & 공격 속도 상승!");
             }
 
             playerWeaponScript.damage = finalDamage;
 
-            Debug.Log($"💥 [공격 발동!] 총 차지 시간: {currentChargeTime:F1}초 / 최종 데미지: {finalDamage}");
+            Debug.Log($"[공격 발동!] 총 차지 시간: {currentChargeTime:F1}초 / 최종 데미지: {finalDamage}");
         }
 
         weaponObject.SetActive(true);
@@ -180,10 +246,11 @@ public class PlayerAttack : MonoBehaviour
 
         float elapsedTime = 0f;
 
-        while (elapsedTime < attackDuration)
+        // 동적으로 변한 currentAttackDuration 을 기준으로 무기를 회전시킵니다.
+        while (elapsedTime < currentAttackDuration)
         {
             elapsedTime += Time.deltaTime;
-            float currentAngle = Mathf.Lerp(baseAngle - (swingAngle / 2f), baseAngle + (swingAngle / 2f), elapsedTime / attackDuration);
+            float currentAngle = Mathf.Lerp(baseAngle - (swingAngle / 2f), baseAngle + (swingAngle / 2f), elapsedTime / currentAttackDuration);
             weaponPivot.rotation = Quaternion.Euler(0, 0, currentAngle);
             yield return null;
         }
@@ -195,7 +262,8 @@ public class PlayerAttack : MonoBehaviour
         weaponObject.SetActive(false);
         isAttacking = false;
 
-        float remainingCooldown = attackCooldown - (attackDuration + weaponLingerTime);
+        // 쿨타임 계산 시에도 변경된 스윙 시간을 적용하여 자연스럽게 남은 대기 시간을 계산합니다.
+        float remainingCooldown = attackCooldown - (currentAttackDuration + weaponLingerTime);
         if (remainingCooldown > 0)
         {
             yield return new WaitForSeconds(remainingCooldown);

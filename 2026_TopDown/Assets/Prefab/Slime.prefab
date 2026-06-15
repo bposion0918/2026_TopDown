@@ -101,10 +101,10 @@ GameObject:
   m_Component:
   - component: {fileID: 435849636547555107}
   - component: {fileID: 8403980286733420450}
-  - component: {fileID: 1107633736638980796}
   - component: {fileID: 2789297392565820624}
   - component: {fileID: 7333907733213202103}
   - component: {fileID: 8019570912363144647}
+  - component: {fileID: 3463396756040665261}
   m_Layer: 7
   m_Name: Slime
   m_TagString: Enemy
@@ -187,52 +187,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &1107633736638980796
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8641641059305245140}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.0012931079, y: -0.00474146}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.21692307, y: 0.17}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.20054343, y: 0.16396543}
-  m_EdgeRadius: 0
 --- !u!114 &2789297392565820624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,8 +220,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98397c710333ae48bf4d8dbe3891c2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  moveSpeed: 0.3
+  moveSpeed: 0.35
   detectionRange: 15
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  avoidDistance: 0.8
+  castRadius: 0.1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  separationRadius: 0.8
+  separationPower: 1.5
   moveSprites:
   - {fileID: -3635838840894485798, guid: ad8da0e721328374ea1670a489c99372, type: 3}
   - {fileID: 7860893253022973495, guid: 2c79696724d2289479a8519545461023, type: 3}
@@ -290,7 +254,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 24c521d94c70d294f8d563c52a9fee1c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -301,3 +265,40 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!70 &3463396756040665261
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8641641059305245140}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.02218403, y: -0.00685098}
+  m_Size: {x: 0.17125002, y: 0.17973216}
+  m_Direction: 0

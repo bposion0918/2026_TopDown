@@ -2159,7 +2159,7 @@ GameObject:
   - component: {fileID: 3183463225094593888}
   - component: {fileID: 3835124455267309014}
   - component: {fileID: 3064370366573457393}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4487,7 +4487,7 @@ TilemapCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 24c521d94c70d294f8d563c52a9fee1c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

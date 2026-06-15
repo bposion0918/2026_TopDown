@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomReward
   coinPrefab: {fileID: 4243660146326868250, guid: fec240f4bdd29c842ba5f91d065bc31c, type: 3}
-  oxygenPrefab: {fileID: 0}
+  oxygenPrefab: {fileID: 4243660146326868250, guid: 26282b20402b1a140a9f7d4e0de2acc9, type: 3}
   mapCenterPoint: {fileID: 6010747500506152965}
 --- !u!1 &1159797985312961434
 GameObject:

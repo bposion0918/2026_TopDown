@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomReward
   coinPrefab: {fileID: 4243660146326868250, guid: fec240f4bdd29c842ba5f91d065bc31c, type: 3}
+  oxygenPrefab: {fileID: 4243660146326868250, guid: 26282b20402b1a140a9f7d4e0de2acc9, type: 3}
   mapCenterPoint: {fileID: 1249143350887895989}
 --- !u!1 &1159797985312961434
 GameObject:
@@ -6259,7 +6260,7 @@ Transform:
   m_GameObject: {fileID: 8068859241711349577}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.43706, y: -0.04417, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

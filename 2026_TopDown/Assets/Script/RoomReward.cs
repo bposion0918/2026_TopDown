@@ -25,8 +25,8 @@ public class RoomReward : MonoBehaviour
                 Debug.LogError("에러: 코인 프리팹이 RoomReward에 연결되지 않았습니다!");
             }
         }
-        // 2. 33% 확률로 산소 드롭 (33 ~ 65)
-        else if (randomChance >= 33 && randomChance < 66)
+        // 2. 15% 확률로 산소 드롭 (33 ~ 53)
+        else if (randomChance >= 33 && randomChance < 48)
         {
             if (oxygenPrefab != null && mapCenterPoint != null)
             {
@@ -38,7 +38,7 @@ public class RoomReward : MonoBehaviour
                 Debug.LogError("에러: 산소 프리팹이 RoomReward에 연결되지 않았습니다!");
             }
         }
-        // 3. 나머지 34% 확률로 꽝 (66 ~ 99)
+        // 3. 나머지 51% 확률로 꽝 (48 ~ 99)
         else
         {
             Debug.Log("방 클리어: 아무 보상도 나오지 않았습니다. (꽝)");

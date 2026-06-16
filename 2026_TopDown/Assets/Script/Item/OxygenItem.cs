@@ -38,9 +38,9 @@ public class OxygenItem : MonoBehaviour
         Vector3 startScale = originalScale * 0.5f;
         Vector3 targetScale = originalScale * 1f;
 
-        // [1단계] 0.5초 등장
+        // [1단계] 1초 등장
         float elapsedTime = 0f;
-        float appearTime = 0.5f;
+        float appearTime = 1f;
         while (elapsedTime < appearTime)
         {
             elapsedTime += Time.deltaTime;

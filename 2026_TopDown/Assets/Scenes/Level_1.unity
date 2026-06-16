@@ -5350,7 +5350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe6cbb357db9a34d9aa31b681383304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOxygen
-  maxOxygen: 200
+  maxOxygen: 100
   currentOxygen: 0
   depletionRate: 1
   oxygenFillImage: {fileID: 1640268500}

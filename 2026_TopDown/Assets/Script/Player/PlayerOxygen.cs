@@ -19,7 +19,7 @@ public class PlayerOxygen : MonoBehaviour
     public float blinkThreshold = 0.2f;
     public float blinkSpeed = 2f;
     public Color normalColor = Color.white;
-    public Color darkColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+    public Color darkColor = new Color(0.3f, 0.3f, 1f);
 
     private bool isDead = false;
     private PlayerHealth playerHealth;
@@ -28,9 +28,11 @@ public class PlayerOxygen : MonoBehaviour
     private Vector3 originalScale;
     private bool isPulsing = false;
 
+    private float baseMaxOxygen;
+
     void Start()
     {
-        currentOxygen = maxOxygen;
+        baseMaxOxygen = maxOxygen;
         playerHealth = GetComponent<PlayerHealth>();
 
         if (oxygenFillImage != null)
@@ -38,12 +40,26 @@ public class PlayerOxygen : MonoBehaviour
             oxygenFillImage.color = normalColor;
             originalScale = oxygenFillImage.transform.localScale;
         }
+
+        ApplyOxygenBonus();
+    }
+
+    public void ApplyOxygenBonus()
+    {
+        if (GameDataManager.instance != null && GameDataManager.instance.playerData != null)
+        {
+            maxOxygen = baseMaxOxygen + GameDataManager.instance.playerData.accumulatedOxygenBonus;
+        }
+
+        currentOxygen = maxOxygen;
+        UpdateOxygenUI();
     }
 
     void Update()
     {
         if (isDead) return;
 
+        // 시간에 따라 depletionRate(초당 1 등 설정값)만큼 고정 수치로 닳음
         currentOxygen -= depletionRate * Time.deltaTime;
 
         if (currentOxygen <= 0)
@@ -59,73 +75,46 @@ public class PlayerOxygen : MonoBehaviour
         if (pulseTimer >= 1f)
         {
             pulseTimer -= 1f;
-
-            if (oxygenFillImage != null && !isPulsing)
-            {
-                StartCoroutine(PulseRoutine());
-            }
+            if (oxygenFillImage != null && !isPulsing) StartCoroutine(PulseRoutine());
         }
     }
 
-    public void ReduceOxygenByPercentage(float percent)
+    // [수정됨] 퍼센트가 아닌 고정 수치(amount)만큼 산소를 깎는 함수로 변경
+    public void ReduceOxygen(float amount)
     {
         if (isDead) return;
 
-        float dropAmount = maxOxygen * (percent / 100f);
-        currentOxygen -= dropAmount;
-
-        Debug.Log($"피격 발생! 산소가 {percent}% ({dropAmount}) 깎였습니다. 남은 산소: {currentOxygen}");
+        currentOxygen -= amount;
 
         if (currentOxygen <= 0)
         {
             currentOxygen = 0;
             DieFromLackOfOxygen();
         }
-
         UpdateOxygenUI();
     }
 
-    // 기존: 퍼센트(비율) 기준 산소 회복 함수 (몬스터 처치 시 사용)
     public void AddOxygenByPercentage(float percent)
     {
         if (isDead) return;
-
         float addAmount = maxOxygen * (percent / 100f);
         currentOxygen += addAmount;
-
-        if (currentOxygen > maxOxygen)
-        {
-            currentOxygen = maxOxygen;
-        }
-
+        if (currentOxygen > maxOxygen) currentOxygen = maxOxygen;
         UpdateOxygenUI();
     }
 
-    // 신규: 고정 수치 기준 산소 회복 함수 (산소 아이템 획득 시 사용)
     public void AddOxygen(float amount)
     {
         if (isDead) return;
-
         currentOxygen += amount;
-
-        // 산소가 최대치를 넘지 않도록 제한
-        if (currentOxygen > maxOxygen)
-        {
-            currentOxygen = maxOxygen;
-        }
-
-        Debug.Log($"산소 회복! {amount} 증가. 현재 산소: {currentOxygen}");
+        if (currentOxygen > maxOxygen) currentOxygen = maxOxygen;
         UpdateOxygenUI();
     }
 
     private void UpdateOxygenUI()
     {
         float percentage = currentOxygen / maxOxygen;
-
-        if (oxygenFillImage != null)
-        {
-            oxygenFillImage.fillAmount = percentage;
-        }
+        if (oxygenFillImage != null) oxygenFillImage.fillAmount = percentage;
 
         if (oxygenText != null)
         {
@@ -138,7 +127,6 @@ public class PlayerOxygen : MonoBehaviour
     private void HandleBlinking()
     {
         if (oxygenFillImage == null) return;
-
         float percentage = currentOxygen / maxOxygen;
 
         if (percentage <= blinkThreshold && currentOxygen > 0)
@@ -155,23 +143,13 @@ public class PlayerOxygen : MonoBehaviour
     private void DieFromLackOfOxygen()
     {
         isDead = true;
-        Debug.Log("Out of Oxygen!");
-
-        if (playerHealth != null)
-        {
-            playerHealth.TakeDamage(9999);
-        }
-
-        if (oxygenFillImage != null)
-        {
-            oxygenFillImage.color = darkColor;
-        }
+        if (playerHealth != null) playerHealth.TakeDamage(9999);
+        if (oxygenFillImage != null) oxygenFillImage.color = darkColor;
     }
 
     private IEnumerator PulseRoutine()
     {
         isPulsing = true;
-
         float pulseDuration = 0.15f;
         float elapsedTime = 0f;
         Vector3 targetScale = originalScale * 1.2f;
@@ -180,10 +158,8 @@ public class PlayerOxygen : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             Vector3 currentScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / pulseDuration);
-
             if (oxygenFillImage != null) oxygenFillImage.transform.localScale = currentScale;
             if (oxygenBackground != null) oxygenBackground.transform.localScale = currentScale;
-
             yield return null;
         }
 
@@ -192,16 +168,13 @@ public class PlayerOxygen : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             Vector3 currentScale = Vector3.Lerp(targetScale, originalScale, elapsedTime / pulseDuration);
-
             if (oxygenFillImage != null) oxygenFillImage.transform.localScale = currentScale;
             if (oxygenBackground != null) oxygenBackground.transform.localScale = currentScale;
-
             yield return null;
         }
 
         if (oxygenFillImage != null) oxygenFillImage.transform.localScale = originalScale;
         if (oxygenBackground != null) oxygenBackground.transform.localScale = originalScale;
-
         isPulsing = false;
     }
 }

@@ -9,7 +9,11 @@ public class PlayerData
 {
     public List<string> collectedITems = new List<string>();
     public int stage = 1;
-    public int money = 0; // 새로 추가된 돈(재화) 변수
+    public int money = 0;
+
+    public float accumulatedOxygenBonus = 0f;
+    public int lastRunMoney = 0;
+    public bool hasPendingReward = false;
 }
 
 public class GameDataManager : MonoBehaviour
@@ -25,7 +29,6 @@ public class GameDataManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // [추가된 부분] 에디터에서 게임 씬부터 바로 시작할 때를 대비해 강제로 데이터를 초기화합니다.
             playerData = LoadData();
             if (playerData == null)
             {
@@ -62,6 +65,21 @@ public class GameDataManager : MonoBehaviour
         }
     }
 
+    // [신규] 로컬 JSON 파일을 삭제하고 데이터를 초기화하는 함수
+    public void ResetData()
+    {
+        string filePath = Application.persistentDataPath + "/player_data.json";
+        if (System.IO.File.Exists(filePath))
+        {
+            System.IO.File.Delete(filePath);
+            Debug.Log("저장된 게임 데이터가 성공적으로 삭제되었습니다.");
+        }
+
+        // 메모리의 데이터도 새 객체로 덮어씌워 완전히 초기화합니다.
+        playerData = new PlayerData();
+        SaveData(playerData);
+    }
+
     public void GameStart()
     {
         playerData = LoadData();
@@ -82,8 +100,8 @@ public class GameDataManager : MonoBehaviour
         if (currentData != null)
         {
             currentData.stage = 1;
-
-            // [패널티] 죽으면 먹었던 돈을 모두 잃음
+            currentData.lastRunMoney = currentData.money;
+            currentData.hasPendingReward = true;
             currentData.money = 0;
 
             foreach (string item in currentData.collectedITems.ToList())
@@ -98,13 +116,12 @@ public class GameDataManager : MonoBehaviour
         SceneManager.LoadScene("GameOver");
     }
 
-    // 코인을 먹었을 때 호출될 함수
     public void AddMoney(int amount)
     {
         if (playerData == null) playerData = LoadData();
 
         playerData.money += amount;
-        SaveData(playerData); // 먹을 때마다 즉시 저장
+        SaveData(playerData);
         Debug.Log($"돈 획득! 현재 소지 금액: {playerData.money}");
     }
 }

@@ -24,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
     private int playerLayer;
     private int enemyLayer;
 
+    // 더 이상 산소를 깎지 않으므로 playerOxygen 변수는 유지하되 로직에서 뺐습니다.
     private PlayerOxygen playerOxygen;
 
     void Start()
@@ -53,10 +54,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         Debug.Log($"현재 체력: {currentHealth} / {maxHealth}");
 
-        if (playerOxygen != null && damage < 9999)
-        {
-            playerOxygen.ReduceOxygenByPercentage(10f);
-        }
+        // --- 피격 시 산소가 닳는 로직을 삭제했습니다 ---
 
         if (healthUI != null)
         {

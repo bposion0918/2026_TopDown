@@ -4,7 +4,7 @@ using UnityEngine;
 public class OxygenItem : MonoBehaviour
 {
     [Header("산소 회복량 (%)")]
-    public float restorePercentage = 20f;
+    public float restorePercentage = 10f;
 
     private bool isPickedUp = false;
 

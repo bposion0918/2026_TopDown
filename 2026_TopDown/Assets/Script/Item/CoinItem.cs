@@ -33,7 +33,7 @@ public class CoinItem : MonoBehaviour
 
         // 플레이어의 자식(Child)으로 넣어서, 플레이어가 이동해도 머리 위를 따라다니게 함
         transform.SetParent(playerTransform);
-        transform.localPosition = new Vector3(0f, 1.2f, 0f); // 머리 위로 살짝 띄움 (필요하면 1.2f 수치 조절해!)
+        transform.localPosition = new Vector3(0f, 0.2f, 0f); // 머리 위로 살짝 띄움 (필요하면 1.2f 수치 조절해!)
 
         Vector3 originalScale = transform.localScale;
         Vector3 startScale = originalScale * 0.5f; // 원래 크기의 0.5배로 시작

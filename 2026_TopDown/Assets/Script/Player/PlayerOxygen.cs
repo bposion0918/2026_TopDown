@@ -85,7 +85,7 @@ public class PlayerOxygen : MonoBehaviour
         UpdateOxygenUI();
     }
 
-    // [새로 추가된 기능] 산소 아이템을 먹었을 때 회복시켜주는 함수
+    // 기존: 퍼센트(비율) 기준 산소 회복 함수 (몬스터 처치 시 사용)
     public void AddOxygenByPercentage(float percent)
     {
         if (isDead) return;
@@ -93,13 +93,28 @@ public class PlayerOxygen : MonoBehaviour
         float addAmount = maxOxygen * (percent / 100f);
         currentOxygen += addAmount;
 
+        if (currentOxygen > maxOxygen)
+        {
+            currentOxygen = maxOxygen;
+        }
+
+        UpdateOxygenUI();
+    }
+
+    // 신규: 고정 수치 기준 산소 회복 함수 (산소 아이템 획득 시 사용)
+    public void AddOxygen(float amount)
+    {
+        if (isDead) return;
+
+        currentOxygen += amount;
+
         // 산소가 최대치를 넘지 않도록 제한
         if (currentOxygen > maxOxygen)
         {
             currentOxygen = maxOxygen;
         }
 
-        Debug.Log($"산소 회복! {percent}% ({addAmount}) 증가. 현재 산소: {currentOxygen}");
+        Debug.Log($"산소 회복! {amount} 증가. 현재 산소: {currentOxygen}");
         UpdateOxygenUI();
     }
 

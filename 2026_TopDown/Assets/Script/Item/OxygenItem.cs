@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class OxygenItem : MonoBehaviour
 {
-    [Header("산소 회복량 (%)")]
-    public float restorePercentage = 20f;
+    [Header("산소 회복량 (고정 수치)")]
+    public float restoreAmount = 20f;
 
     private bool isPickedUp = false;
     private Vector3 targetOriginalScale;
@@ -45,7 +45,8 @@ public class OxygenItem : MonoBehaviour
             PlayerOxygen playerOxygen = collision.GetComponent<PlayerOxygen>();
             if (playerOxygen != null)
             {
-                playerOxygen.AddOxygenByPercentage(restorePercentage);
+                // 변경됨: AddOxygenByPercentage 대신 AddOxygen(고정 수치) 호출
+                playerOxygen.AddOxygen(restoreAmount);
             }
 
             StartCoroutine(PickupEffectRoutine(collision.transform));

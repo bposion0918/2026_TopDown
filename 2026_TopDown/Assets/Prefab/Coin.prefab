@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85b435361ed037469e8e8e0cf0c8efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinItem
-  coinValue: 1
+  coinValue: 5
 --- !u!95 &3854042824349657095
 Animator:
   serializedVersion: 7

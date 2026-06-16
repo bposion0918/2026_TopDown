@@ -9,7 +9,7 @@ public class RoomReward : MonoBehaviour
 
     public void DropReward()
     {
-        // 0부터 99까지 난수 생성 (총 100개 확률)
+        // 0부터 99까지 난수 생성 (총 100개)
         int randomChance = Random.Range(0, 100);
 
         // 1. 33% 확률로 돈 드롭 (0 ~ 32)
@@ -25,8 +25,8 @@ public class RoomReward : MonoBehaviour
                 Debug.LogError("에러: 코인 프리팹이 RoomReward에 연결되지 않았습니다!");
             }
         }
-        // 2. 15% 확률로 산소 드롭 (33 ~ 53)
-        else if (randomChance >= 33 && randomChance < 48)
+        // 2. 33% 확률로 산소 드롭 (33 ~ 65)
+        else if (randomChance >= 33 && randomChance < 66)
         {
             if (oxygenPrefab != null && mapCenterPoint != null)
             {
@@ -38,7 +38,7 @@ public class RoomReward : MonoBehaviour
                 Debug.LogError("에러: 산소 프리팹이 RoomReward에 연결되지 않았습니다!");
             }
         }
-        // 3. 나머지 51% 확률로 꽝 (48 ~ 99)
+        // 3. 나머지 34% 확률로 꽝 (66 ~ 99)
         else
         {
             Debug.Log("방 클리어: 아무 보상도 나오지 않았습니다. (꽝)");

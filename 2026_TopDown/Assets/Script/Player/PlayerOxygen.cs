@@ -13,7 +13,7 @@ public class PlayerOxygen : MonoBehaviour
     [Header("UI Settings")]
     public Image oxygenFillImage;
     public GameObject oxygenBackground;
-    public TextMeshProUGUI oxygenText;
+    public TextMeshProUGUI oxygenText;         // "O2 : 100 / 100"을 표시할 텍스트
 
     [Header("Blink Settings")]
     public float blinkThreshold = 0.2f;
@@ -59,7 +59,6 @@ public class PlayerOxygen : MonoBehaviour
     {
         if (isDead) return;
 
-        // 시간에 따라 depletionRate(초당 1 등 설정값)만큼 고정 수치로 닳음
         currentOxygen -= depletionRate * Time.deltaTime;
 
         if (currentOxygen <= 0)
@@ -79,7 +78,6 @@ public class PlayerOxygen : MonoBehaviour
         }
     }
 
-    // [수정됨] 퍼센트가 아닌 고정 수치(amount)만큼 산소를 깎는 함수로 변경
     public void ReduceOxygen(float amount)
     {
         if (isDead) return;
@@ -116,11 +114,13 @@ public class PlayerOxygen : MonoBehaviour
         float percentage = currentOxygen / maxOxygen;
         if (oxygenFillImage != null) oxygenFillImage.fillAmount = percentage;
 
+        int currentVal = Mathf.CeilToInt(currentOxygen);
+        int maxVal = Mathf.CeilToInt(maxOxygen);
+        currentVal = Mathf.Clamp(currentVal, 0, maxVal);
+
         if (oxygenText != null)
         {
-            int displayPercent = Mathf.CeilToInt(percentage * 100f);
-            displayPercent = Mathf.Clamp(displayPercent, 0, 100);
-            oxygenText.text = $"O<sub>2</sub> : {displayPercent}%";
+            oxygenText.text = $"O<sub>2</sub> : {currentVal} | {maxVal}";
         }
     }
 

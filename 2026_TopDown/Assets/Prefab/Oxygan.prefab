@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf12c1316af56bb499cf30c8af71c3e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OxygenItem
-  restorePercentage: 20
+  restoreAmount: 15
 --- !u!95 &1167173254196668432
 Animator:
   serializedVersion: 7

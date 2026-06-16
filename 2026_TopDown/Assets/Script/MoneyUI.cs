@@ -37,7 +37,7 @@ public class MoneyUI : MonoBehaviour
 
             // 현재 기억하는 돈 액수를 업데이트하고 텍스트에 적용합니다.
             currentDisplayMoney = actualMoney;
-            moneyText.text = " : " + actualMoney.ToString();
+            moneyText.text = " : " + actualMoney.ToString() + " Coins ";
         }
         else
         {

@@ -13,8 +13,8 @@ public class PlayerAttack : MonoBehaviour
     public float swingAngle = 60f;
 
     [Header("차지(기 모으기) 설정")]
-    public float maxChargeTime = 5.0f;
-    public float chargeInterval = 1.0f;
+    public float maxChargeTime = 2.5f;
+    public float chargeInterval = 0.5f;
     public float damageBonusPerInterval = 0.2f;
     public float highChargeBonus = 1.5f;
     public float maxChargeBonus = 3.0f;

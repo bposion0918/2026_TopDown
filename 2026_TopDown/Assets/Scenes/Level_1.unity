@@ -2890,9 +2890,9 @@ RectTransform:
   - {fileID: 1582793564}
   - {fileID: 1640268499}
   - {fileID: 2095107059}
+  - {fileID: 676393473}
   - {fileID: 1616494346}
   - {fileID: 192075359}
-  - {fileID: 676393473}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5316,8 +5316,8 @@ MonoBehaviour:
   attackCooldown: 1.4
   weaponLingerTime: 0.2
   swingAngle: 135
-  maxChargeTime: 5
-  chargeInterval: 1
+  maxChargeTime: 2.5
+  chargeInterval: 0.5
   damageBonusPerInterval: 0.2
   highChargeBonus: 1.5
   maxChargeBonus: 3

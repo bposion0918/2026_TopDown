@@ -3,15 +3,22 @@ using UnityEngine;
 
 public class MapSpawner : MonoBehaviour
 {
+    [Header("특수 방 생성 설정")]
+    public int bossRoomCount = 1;
+    public int shopRoomCount = 1;
+
+    [Range(0f, 100f)]
+    public float treasureRoomChance = 50f;
+    public int maxTreasureRooms = 1;
+
     [Header("스테이지 데이터")]
     public StageData currentStageData;
 
     [Header("맵 생성 설정")]
-    public int maxRooms = 6; // 생성할 총 방의 개수
-    public float roomWidth = 40f;  // 방의 가로 간격
-    public float roomHeight = 25f; // 방의 세로 간격
+    public int maxRooms = 8;
+    public float roomWidth = 40f;
+    public float roomHeight = 25f;
 
-    // 생성된 방들을 좌표와 함께 저장하는 딕셔너리
     private Dictionary<Vector2Int, RoomInfo> spawnedRooms = new Dictionary<Vector2Int, RoomInfo>();
 
     void Start()
@@ -22,10 +29,9 @@ public class MapSpawner : MonoBehaviour
     public void GenerateMap()
     {
         List<Vector2Int> roomCoordinates = new List<Vector2Int>();
-        Vector2Int currentPos = Vector2Int.zero; // (0,0)에서 시작
+        Vector2Int currentPos = Vector2Int.zero;
         roomCoordinates.Add(currentPos);
 
-        // 1. 랜덤하게 이어지는 방의 좌표들 먼저 생성 (Random Walker 알고리즘)
         while (roomCoordinates.Count < maxRooms)
         {
             Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
@@ -38,42 +44,119 @@ public class MapSpawner : MonoBehaviour
             }
         }
 
-        // 2. 생성된 좌표를 바탕으로 실제 방 프리팹 스폰
+        List<Vector2Int> deadEnds = new List<Vector2Int>();
         foreach (Vector2Int pos in roomCoordinates)
         {
-            GameObject roomPrefab;
-            if (pos == Vector2Int.zero) roomPrefab = currentStageData.startRooms[0]; // 시작방
-            else roomPrefab = currentStageData.normalRooms[Random.Range(0, currentStageData.normalRooms.Length)]; // 일반방 랜덤
+            if (pos == Vector2Int.zero) continue;
+
+            int neighborCount = 0;
+            if (roomCoordinates.Contains(pos + Vector2Int.up)) neighborCount++;
+            if (roomCoordinates.Contains(pos + Vector2Int.down)) neighborCount++;
+            if (roomCoordinates.Contains(pos + Vector2Int.left)) neighborCount++;
+            if (roomCoordinates.Contains(pos + Vector2Int.right)) neighborCount++;
+
+            if (neighborCount == 1)
+            {
+                deadEnds.Add(pos);
+            }
+        }
+
+        // 각 좌표에 어떤 종류의 '방 타입'이 들어갈지 저장
+        Dictionary<Vector2Int, RoomType> roomTypes = new Dictionary<Vector2Int, RoomType>();
+
+        if (deadEnds.Count > 0 && bossRoomCount > 0)
+        {
+            deadEnds.Sort((a, b) => b.sqrMagnitude.CompareTo(a.sqrMagnitude));
+
+            for (int i = 0; i < bossRoomCount && deadEnds.Count > 0; i++)
+            {
+                roomTypes[deadEnds[0]] = RoomType.Boss;
+                deadEnds.RemoveAt(0);
+            }
+        }
+
+        for (int i = 0; i < shopRoomCount && deadEnds.Count > 0; i++)
+        {
+            int randIdx = Random.Range(0, deadEnds.Count);
+            roomTypes[deadEnds[randIdx]] = RoomType.Shop;
+            deadEnds.RemoveAt(randIdx);
+        }
+
+        for (int i = 0; i < maxTreasureRooms && deadEnds.Count > 0; i++)
+        {
+            if (Random.Range(0f, 100f) <= treasureRoomChance)
+            {
+                int randIdx = Random.Range(0, deadEnds.Count);
+                roomTypes[deadEnds[randIdx]] = RoomType.Treasure;
+                deadEnds.RemoveAt(randIdx);
+            }
+        }
+
+        foreach (Vector2Int pos in roomCoordinates)
+        {
+            RoomType currentType = RoomType.Normal;
+            if (pos == Vector2Int.zero) currentType = RoomType.Start;
+            else if (roomTypes.ContainsKey(pos)) currentType = roomTypes[pos];
+
+            GameObject roomPrefab = null;
+            switch (currentType)
+            {
+                case RoomType.Start: roomPrefab = currentStageData.startRooms[0]; break;
+                case RoomType.Boss: roomPrefab = currentStageData.bossRooms[0]; break;
+                case RoomType.Shop: roomPrefab = currentStageData.shopRooms[0]; break;
+                case RoomType.Treasure: roomPrefab = currentStageData.treasureRooms[0]; break;
+                default: roomPrefab = currentStageData.normalRooms[Random.Range(0, currentStageData.normalRooms.Length)]; break;
+            }
 
             Vector3 spawnPosition = new Vector3(pos.x * roomWidth, pos.y * roomHeight, 0);
             GameObject newRoomObj = Instantiate(roomPrefab, spawnPosition, Quaternion.identity, transform);
 
             RoomInfo roomInfo = newRoomObj.GetComponent<RoomInfo>();
-            roomInfo.SetCameraPositionForDoors(spawnPosition); // 카메라 중심점 전달
-
-            spawnedRooms.Add(pos, roomInfo);
+            if (roomInfo != null)
+            {
+                roomInfo.roomType = currentType; // 자신의 방 타입 저장
+                roomInfo.SetCameraPositionForDoors(spawnPosition);
+                spawnedRooms.Add(pos, roomInfo);
+            }
         }
 
-        // 3. 인접한 방 확인 및 문(Door) 연결하기
         foreach (KeyValuePair<Vector2Int, RoomInfo> kvp in spawnedRooms)
         {
             Vector2Int pos = kvp.Key;
             RoomInfo room = kvp.Value;
 
-            // 주변 좌표에 다른 방이 존재하는지 확인
             bool hasTop = spawnedRooms.ContainsKey(pos + Vector2Int.up);
             bool hasBottom = spawnedRooms.ContainsKey(pos + Vector2Int.down);
             bool hasLeft = spawnedRooms.ContainsKey(pos + Vector2Int.left);
             bool hasRight = spawnedRooms.ContainsKey(pos + Vector2Int.right);
 
-            // 방이 있는 방향의 문만 활성화
             room.SetupDoors(hasTop, hasBottom, hasLeft, hasRight);
 
-            // 활성화된 문들끼리 양방향 연결 (서로의 반대편 문을 연결)
-            if (hasTop) room.topDoor.connectedDoor = spawnedRooms[pos + Vector2Int.up].bottomDoor;
-            if (hasBottom) room.bottomDoor.connectedDoor = spawnedRooms[pos + Vector2Int.down].topDoor;
-            if (hasLeft) room.leftDoor.connectedDoor = spawnedRooms[pos + Vector2Int.left].rightDoor;
-            if (hasRight) room.rightDoor.connectedDoor = spawnedRooms[pos + Vector2Int.right].leftDoor;
+            // 문 연결 및 도착할 방의 정보를 바탕으로 디자인 변경
+            if (hasTop)
+            {
+                RoomInfo targetRoom = spawnedRooms[pos + Vector2Int.up];
+                room.topDoor.connectedDoor = targetRoom.bottomDoor;
+                room.topDoor.SetDoorAppearance(targetRoom.roomType);
+            }
+            if (hasBottom)
+            {
+                RoomInfo targetRoom = spawnedRooms[pos + Vector2Int.down];
+                room.bottomDoor.connectedDoor = targetRoom.topDoor;
+                room.bottomDoor.SetDoorAppearance(targetRoom.roomType);
+            }
+            if (hasLeft)
+            {
+                RoomInfo targetRoom = spawnedRooms[pos + Vector2Int.left];
+                room.leftDoor.connectedDoor = targetRoom.rightDoor;
+                room.leftDoor.SetDoorAppearance(targetRoom.roomType);
+            }
+            if (hasRight)
+            {
+                RoomInfo targetRoom = spawnedRooms[pos + Vector2Int.right];
+                room.rightDoor.connectedDoor = targetRoom.leftDoor;
+                room.rightDoor.SetDoorAppearance(targetRoom.roomType);
+            }
         }
     }
 }

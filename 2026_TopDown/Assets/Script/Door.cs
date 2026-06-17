@@ -5,23 +5,27 @@ public class Door : MonoBehaviour
 {
     [Header("문 설정")]
     public Transform spawnPoint;
-    public Animator animator;           // 문 열림/닫힘 애니메이터
-    public Collider2D solidCollider;    // 문이 닫혔을 때 플레이어 통과를 막을 단단한 벽
+    public Animator animator;
+    public Collider2D solidCollider;
     public bool isLocked = false;
+
+    [Header("특수 문 디자인 (애니메이터 컨트롤러)")]
+    public RuntimeAnimatorController normalDoorAnim;
+    public RuntimeAnimatorController bossDoorAnim;
+    public RuntimeAnimatorController shopDoorAnim;
+    public RuntimeAnimatorController treasureDoorAnim;
 
     [HideInInspector] public Door connectedDoor;
     [HideInInspector] public Vector3 cameraTargetPos;
 
     private void Start()
     {
-        // 방에 처음 들어갈 때는 문이 열려있는 상태로 시작합니다.
         if (solidCollider != null) solidCollider.enabled = false;
         if (animator != null) animator.SetBool("isOpen", true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 문이 잠겨있으면 포탈이 작동하지 않음!
         if (isLocked) return;
 
         if (collision.CompareTag("Player") && connectedDoor != null)
@@ -69,19 +73,39 @@ public class Door : MonoBehaviour
         }
     }
 
-    // 몬스터 스포너가 몬스터를 감지하고 문을 "잠글 때" 부르는 함수
     public void CloseDoor()
     {
         isLocked = true;
         if (animator != null) animator.SetBool("isOpen", false);
-        if (solidCollider != null) solidCollider.enabled = true; // 벽 생성 (못 지나감)
+        if (solidCollider != null) solidCollider.enabled = true;
     }
 
-    // 몬스터를 다 잡고 문을 "열 때" 부르는 함수
     public void OpenDoor()
     {
         isLocked = false;
         if (animator != null) animator.SetBool("isOpen", true);
-        if (solidCollider != null) solidCollider.enabled = false; // 벽 제거 (지나갈 수 있음)
+        if (solidCollider != null) solidCollider.enabled = false;
+    }
+
+    // 연결될 방의 종류를 전달받아 문의 디자인(애니메이터)을 바꾸는 함수
+    public void SetDoorAppearance(RoomType targetRoomType)
+    {
+        if (animator == null) return;
+
+        switch (targetRoomType)
+        {
+            case RoomType.Boss:
+                if (bossDoorAnim != null) animator.runtimeAnimatorController = bossDoorAnim;
+                break;
+            case RoomType.Shop:
+                if (shopDoorAnim != null) animator.runtimeAnimatorController = shopDoorAnim;
+                break;
+            case RoomType.Treasure:
+                if (treasureDoorAnim != null) animator.runtimeAnimatorController = treasureDoorAnim;
+                break;
+            default: // 시작방이나 노말방은 일반 문 디자인 사용
+                if (normalDoorAnim != null) animator.runtimeAnimatorController = normalDoorAnim;
+                break;
+        }
     }
 }

@@ -2696,8 +2696,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 376a44704d0e36643a5f554d87920903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
+  bossRoomCount: 1
+  shopRoomCount: 1
+  treasureRoomChance: 50
+  maxTreasureRooms: 1
   currentStageData: {fileID: 11400000, guid: 5097ee741bd755a49899535f6970b7bb, type: 2}
-  maxRooms: 8
+  maxRooms: 11
   roomWidth: 30
   roomHeight: 25
 --- !u!4 &755502727
@@ -3245,6 +3249,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1581972168}
+  - {fileID: 1756542437}
   - {fileID: 1582793564}
   - {fileID: 1640268499}
   - {fileID: 2095107059}
@@ -3252,8 +3258,6 @@ RectTransform:
   - {fileID: 1616494346}
   - {fileID: 192075359}
   - {fileID: 1888034523}
-  - {fileID: 1581972168}
-  - {fileID: 1756542437}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5369,7 +5373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MinimapController
   minimapCamera: {fileID: 40070793}
   backgroundUI: {fileID: 1581972168}
-  padding: 0
+  padding: 8
   normalPosition: {x: -90, y: -90}
   normalSize: {x: 200, y: 200}
   normalCamSize: 50

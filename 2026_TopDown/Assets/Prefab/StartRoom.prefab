@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b379976399fd1a341abda613e6f59dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomInfo
+  roomType: 0
   topDoor: {fileID: 5779981805897497626}
   bottomDoor: {fileID: 4401135160766299003}
   leftDoor: {fileID: 1803132252949594391}
@@ -4569,6 +4570,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   solidCollider: {fileID: 0}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &7283033140155978386
@@ -4727,6 +4732,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   solidCollider: {fileID: 0}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &6719822146678738537
@@ -5315,6 +5324,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   solidCollider: {fileID: 0}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &5068055182555722875
@@ -5595,6 +5608,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   solidCollider: {fileID: 0}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &9177238127916082108

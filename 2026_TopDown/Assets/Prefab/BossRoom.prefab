@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b379976399fd1a341abda613e6f59dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomInfo
+  roomType: 2
   topDoor: {fileID: 5779981805897497626}
   bottomDoor: {fileID: 4401135160766299003}
   leftDoor: {fileID: 1803132252949594391}
@@ -4618,6 +4619,10 @@ MonoBehaviour:
   animator: {fileID: 5243439423708208850}
   solidCollider: {fileID: 5296460775767338464}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 9100000, guid: c3720e311bbd95046a731d65149e6f98, type: 2}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &7283033140155978386
@@ -4846,6 +4851,10 @@ MonoBehaviour:
   animator: {fileID: 2194520631883722820}
   solidCollider: {fileID: 7477730939940866952}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 9100000, guid: c3720e311bbd95046a731d65149e6f98, type: 2}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &6719822146678738537
@@ -5350,6 +5359,10 @@ MonoBehaviour:
   animator: {fileID: 6957767162448314493}
   solidCollider: {fileID: 149753117395631685}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 9100000, guid: c3720e311bbd95046a731d65149e6f98, type: 2}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &5068055182555722875
@@ -5609,6 +5622,10 @@ MonoBehaviour:
   animator: {fileID: 2826105681575101434}
   solidCollider: {fileID: 5558880116065156255}
   isLocked: 0
+  normalDoorAnim: {fileID: 0}
+  bossDoorAnim: {fileID: 9100000, guid: c3720e311bbd95046a731d65149e6f98, type: 2}
+  shopDoorAnim: {fileID: 0}
+  treasureDoorAnim: {fileID: 0}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &9177238127916082108
@@ -5830,9 +5847,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterSpawner
   monsterPrefabs:
-  - {fileID: 8641641059305245140, guid: 84bd6beefccf4074ab6f72748f3ab45c, type: 3}
+  - {fileID: 8641641059305245140, guid: dc37cca86c06f5849830efc44f42b89f, type: 3}
   minMonsters: 1
-  maxMonsters: 3
+  maxMonsters: 1
   spawnAreaSize: {x: 1.4, y: 0.7}
   doorsInRoom:
   - {fileID: 3029051080106660074}

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // 기존 ESC 일시정지 로직
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (TimeStop)
@@ -22,6 +23,12 @@ public class GameManager : MonoBehaviour
             {
                 PauseGame();
             }
+        }
+
+        // [신규] R키를 누르면 데이터 초기화 후 즉시 재시작
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetAndRestartGame();
         }
     }
 
@@ -68,16 +75,26 @@ public class GameManager : MonoBehaviour
     public void ButtonLog() { Debug.Log("BUTTON CLICKED!"); }
     public void QuitGame() { Debug.Log("게임 종료"); Application.Quit(); }
 
-    // [신규] 버튼에 연결할 데이터 초기화 함수
-    public void ResetGameData()
+    // [수정됨] 기존 데이터를 지우고 바로 게임을 처음(타이틀)으로 되돌리는 함수
+    public void ResetAndRestartGame()
     {
         if (GameDataManager.instance != null)
         {
+            // 1. JSON 파일 삭제 및 데이터 리셋
             GameDataManager.instance.ResetData();
         }
         else
         {
-            Debug.LogError("에러: GameDataManager 인스턴스를 찾을 수 없습니다.");
+            Debug.LogError("GameDataManager를 찾을 수 없습니다.");
         }
+
+        // 2. 만약 게임오버 창이나 일시정지 창에서 눌렀을 경우를 대비해 시간의 흐름을 원상복구
+        Time.timeScale = 1f;
+
+        // 3. 타이틀 씬으로 이동하여 완전히 초기 상태로 재시작
+        // (만약 타이틀을 거치지 않고 바로 1스테이지로 가고 싶다면 "TitleScene" 대신 "Level_1"을 적으세요)
+        SceneManager.LoadScene("TitleScene");
+
+        Debug.Log("데이터가 초기화되고 게임이 재시작되었습니다.");
     }
 }

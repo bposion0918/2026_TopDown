@@ -3,17 +3,22 @@ using UnityEngine;
 public class MinimapController : MonoBehaviour
 {
     public Camera minimapCamera;
+
+    [Header("배경 이미지 연결")]
+    public RectTransform backgroundUI; // 새로 만든 배경 이미지 연결칸
+    public float padding = 20f;        // 배경이 미니맵보다 얼마나 더 클지 (테두리 여백)
+
     private RectTransform rectTransform;
 
     [Header("평상시 (우측 상단)")]
-    // 우측 상단 모서리로부터 얼만큼 떨어져 있을지 결정합니다.
     public Vector2 normalPosition = new Vector2(-20f, -20f);
     public Vector2 normalSize = new Vector2(250f, 250f);
     public float normalCamSize = 40f;
 
     [Header("확대 시 (정중앙)")]
+    public Vector2 expandedPosition = Vector2.zero;
     public Vector2 expandedSize = new Vector2(800f, 800f);
-    public float expandedCamSize = 100f; // 맵 전체가 보이게 카메라 시야를 넓힙니다.
+    public float expandedCamSize = 100f;
 
     void Start()
     {
@@ -26,27 +31,43 @@ public class MinimapController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Tab))
         {
-            // 1. 앵커(기준점)와 피벗을 화면 '정중앙'으로 변경
+            // 1. 미니맵 앵커와 위치를 중앙으로 확대
             rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
-
-            // 2. 위치를 중앙(0,0)으로 맞추고 크기와 시야를 확대
-            rectTransform.anchoredPosition = Vector2.zero;
+            rectTransform.anchoredPosition = expandedPosition;
             rectTransform.sizeDelta = expandedSize;
             minimapCamera.orthographicSize = expandedCamSize;
+
+            // 2. 배경 이미지도 동일하게 중앙으로 확대 (패딩만큼 크기를 더 키워 테두리 느낌을 줌)
+            if (backgroundUI != null)
+            {
+                backgroundUI.anchorMin = new Vector2(0.5f, 0.5f);
+                backgroundUI.anchorMax = new Vector2(0.5f, 0.5f);
+                backgroundUI.pivot = new Vector2(0.5f, 0.5f);
+                backgroundUI.anchoredPosition = expandedPosition;
+                backgroundUI.sizeDelta = expandedSize + new Vector2(padding, padding);
+            }
         }
         else
         {
-            // 1. 앵커(기준점)와 피벗을 다시 화면 '우측 상단'으로 복구
+            // 1. 평상시 미니맵 위치 복구
             rectTransform.anchorMin = new Vector2(1f, 1f);
             rectTransform.anchorMax = new Vector2(1f, 1f);
             rectTransform.pivot = new Vector2(1f, 1f);
-
-            // 2. 우측 상단 여백 위치로 맞추고 크기와 시야를 축소
             rectTransform.anchoredPosition = normalPosition;
             rectTransform.sizeDelta = normalSize;
             minimapCamera.orthographicSize = normalCamSize;
+
+            // 2. 평상시 배경 이미지 위치 복구
+            if (backgroundUI != null)
+            {
+                backgroundUI.anchorMin = new Vector2(1f, 1f);
+                backgroundUI.anchorMax = new Vector2(1f, 1f);
+                backgroundUI.pivot = new Vector2(1f, 1f);
+                backgroundUI.anchoredPosition = normalPosition;
+                backgroundUI.sizeDelta = normalSize + new Vector2(padding, padding);
+            }
         }
     }
 }

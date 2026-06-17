@@ -3,56 +3,104 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [Header("체력 설정")]
     public int maxHealth = 10;
     private int currentHealth;
 
-    // 산소 회복량 (1%)
+    [Header("더미(테스트용) 모드")]
+    public bool isDummy = false;
+
+    [Header("산소 회복량")]
     public float oxygenRewardPercentage = 1f;
 
-    // AI 스크립트를 조종하기 위한 변수
+    [Header("피격 효과 및 텍스트")]
+    public Color damageColor = Color.red;
+    public float flashDuration = 0.1f;
+    public GameObject damageTextPrefab;
+    public Transform textSpawnPoint;
+
     private EnemyAI enemyAI;
+    private SpriteRenderer sr;
+    private Coroutine flashCoroutine;
 
     void Start()
     {
         currentHealth = maxHealth;
-        enemyAI = GetComponent<EnemyAI>(); // 시작할 때 자기 몸에 있는 AI 스크립트를 찾아둠
+        sr = GetComponent<SpriteRenderer>();
+
+        // 더미가 아닐 때만 AI를 가져옵니다.
+        if (!isDummy)
+        {
+            enemyAI = GetComponent<EnemyAI>();
+        }
+
+        if (isDummy)
+        {
+            maxHealth = 9999;
+            currentHealth = maxHealth;
+        }
     }
 
-    // 몬스터가 데미지를 입을 때 실행되는 함수
     public void TakeDamage(int damage, Vector2 knockbackDir, float knockbackPower)
     {
         currentHealth -= damage;
 
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
+        // --- 1. 데미지 텍스트 띄우기 (처음처럼 약간의 랜덤 위치로 복구) ---
+        if (damageTextPrefab != null && textSpawnPoint != null)
         {
-            // 밀쳐내기 전에, 몬스터가 스스로 다가오던 속도를 0으로 초기화해야 깔끔하게 밀려남!
-            rb.linearVelocity = Vector2.zero;
+            Vector3 randomOffset = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.2f, 0.2f), 0);
+            GameObject textObj = Instantiate(damageTextPrefab, textSpawnPoint.position + randomOffset, Quaternion.identity);
 
-            // 플레이어가 때린 방향으로 밀어내기
-            rb.AddForce(knockbackDir * knockbackPower, ForceMode2D.Impulse);
+            DamageText dmgText = textObj.GetComponent<DamageText>();
+            if (dmgText != null) dmgText.Setup(damage);
         }
 
-        // 맞았을 때 AI를 잠깐 멈추는 기절 효과 실행
-        if (enemyAI != null && gameObject.activeSelf)
+        // --- 2. 피격 시 빨간색 깜빡임 효과 ---
+        if (sr != null)
         {
-            StartCoroutine(KnockbackRoutine());
+            if (flashCoroutine != null) StopCoroutine(flashCoroutine);
+            flashCoroutine = StartCoroutine(FlashRedRoutine());
         }
 
-        if (currentHealth <= 0)
+        // --- 3. 넉백 및 사망 처리 ---
+        if (!isDummy)
         {
-            Die();
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.AddForce(knockbackDir * knockbackPower, ForceMode2D.Impulse);
+            }
+
+            if (enemyAI != null && gameObject.activeSelf)
+            {
+                StartCoroutine(KnockbackRoutine());
+            }
+
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
+        }
+        else
+        {
+            if (currentHealth <= 0) currentHealth = maxHealth;
         }
     }
 
-    // 0.2초 동안 몬스터의 추적 AI를 끄는 코루틴
+    private IEnumerator FlashRedRoutine()
+    {
+        sr.color = damageColor;
+        yield return new WaitForSeconds(flashDuration);
+        sr.color = Color.white;
+    }
+
     private IEnumerator KnockbackRoutine()
     {
-        enemyAI.enabled = false;               // AI 스크립트 끄기 (물리 엔진이 마음껏 밀어낼 수 있음)
-        yield return new WaitForSeconds(0.2f); // 0.2초 대기 (이 시간 동안 뒤로 쭈욱 밀려남)
+        if (enemyAI != null) enemyAI.enabled = false;
+        yield return new WaitForSeconds(0.2f);
 
-        // 몬스터가 죽지 않고 살아있다면 다시 쫓아오게 AI 켜기
-        if (this != null && currentHealth > 0)
+        if (this != null && currentHealth > 0 && enemyAI != null)
         {
             enemyAI.enabled = true;
         }
@@ -60,7 +108,6 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
-        // 1. 플레이어를 찾아서 산소를 회복시킵니다.
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -70,8 +117,6 @@ public class EnemyHealth : MonoBehaviour
                 playerOxygen.AddOxygenByPercentage(oxygenRewardPercentage);
             }
         }
-
-        // 2. 몬스터 오브젝트 삭제
         Destroy(gameObject);
     }
 }

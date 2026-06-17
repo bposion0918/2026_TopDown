@@ -128,6 +128,16 @@ public class PlayerHealth : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            // 부딪힌 대상의 EnemyHealth 컴포넌트를 가져옵니다.
+            EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+
+            // 만약 컴포넌트가 존재하고, 그 적이 '더미'라면 데미지를 입지 않고 함수를 빠져나갑니다.
+            if (enemyHealth != null && enemyHealth.isDummy)
+            {
+                return;
+            }
+
+            // 더미가 아닌 진짜 적일 때만 데미지를 입습니다.
             TakeDamage(1);
         }
     }

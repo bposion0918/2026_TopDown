@@ -41,18 +41,21 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage, Vector2 knockbackDir, float knockbackPower)
+    // 풀차지 상태를 전달받을 수 있도록 isFullyCharged 매개변수가 추가되었습니다.
+    public void TakeDamage(int damage, Vector2 knockbackDir, float knockbackPower, bool isFullyCharged = false)
     {
         currentHealth -= damage;
 
-        // --- 1. 데미지 텍스트 띄우기 (처음처럼 약간의 랜덤 위치로 복구) ---
+        // --- 1. 데미지 텍스트 띄우기 ---
         if (damageTextPrefab != null && textSpawnPoint != null)
         {
             Vector3 randomOffset = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.2f, 0.2f), 0);
             GameObject textObj = Instantiate(damageTextPrefab, textSpawnPoint.position + randomOffset, Quaternion.identity);
 
             DamageText dmgText = textObj.GetComponent<DamageText>();
-            if (dmgText != null) dmgText.Setup(damage);
+
+            // 데미지 텍스트를 띄울 때 풀차지 여부도 함께 넘겨줍니다.
+            if (dmgText != null) dmgText.Setup(damage, isFullyCharged);
         }
 
         // --- 2. 피격 시 빨간색 깜빡임 효과 ---

@@ -5854,12 +5854,12 @@ GameObject:
   - component: {fileID: 1943371450}
   - component: {fileID: 1943371449}
   - component: {fileID: 1943371448}
+  - component: {fileID: 1943371455}
   - component: {fileID: 1943371447}
   - component: {fileID: 1943371446}
   - component: {fileID: 1943371452}
   - component: {fileID: 1943371453}
   - component: {fileID: 1943371454}
-  - component: {fileID: 1943371455}
   - component: {fileID: 1943371456}
   m_Layer: 6
   m_Name: Player
@@ -6792,6 +6792,10 @@ MonoBehaviour:
   damage: 5
   knockbackPower: 1
   isFullyCharged: 0
+  enemyShakeDuration: 0.2
+  enemyShakeMagnitude: 0.1
+  rockShakeDuration: 0.15
+  rockShakeMagnitude: 0.08
 --- !u!1 &2034506525
 GameObject:
   m_ObjectHideFlags: 0

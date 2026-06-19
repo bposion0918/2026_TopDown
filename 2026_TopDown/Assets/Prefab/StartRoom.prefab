@@ -4575,8 +4575,8 @@ MonoBehaviour:
   isLocked: 0
   normalDoorAnim: {fileID: 0}
   bossDoorAnim: {fileID: 0}
-  shopDoorAnim: {fileID: 0}
-  treasureDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
+  treasureDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &7283033140155978386
@@ -4737,8 +4737,8 @@ MonoBehaviour:
   isLocked: 0
   normalDoorAnim: {fileID: 0}
   bossDoorAnim: {fileID: 0}
-  shopDoorAnim: {fileID: 0}
-  treasureDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
+  treasureDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &6719822146678738537
@@ -5329,8 +5329,8 @@ MonoBehaviour:
   isLocked: 0
   normalDoorAnim: {fileID: 0}
   bossDoorAnim: {fileID: 0}
-  shopDoorAnim: {fileID: 0}
-  treasureDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
+  treasureDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &5068055182555722875
@@ -5613,8 +5613,8 @@ MonoBehaviour:
   isLocked: 0
   normalDoorAnim: {fileID: 0}
   bossDoorAnim: {fileID: 0}
-  shopDoorAnim: {fileID: 0}
-  treasureDoorAnim: {fileID: 0}
+  shopDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
+  treasureDoorAnim: {fileID: 9100000, guid: bbe3482d91a6a4f4a9ab5efd526794ed, type: 2}
   connectedDoor: {fileID: 0}
   cameraTargetPos: {x: 0, y: 0, z: 0}
 --- !u!61 &9177238127916082108

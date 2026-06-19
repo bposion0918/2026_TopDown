@@ -4534,6 +4534,7 @@ GameObject:
   - component: {fileID: 5779981805897497626}
   - component: {fileID: 7283033140155978386}
   - component: {fileID: 2468523128529994122}
+  - component: {fileID: 6159251327013263317}
   m_Layer: 0
   m_Name: Door_Top
   m_TagString: Untagged
@@ -4570,7 +4571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 4031900377765756121}
-  animator: {fileID: 0}
+  animator: {fileID: 6159251327013263317}
   solidCollider: {fileID: 0}
   isLocked: 0
   normalDoorAnim: {fileID: 0}
@@ -4684,6 +4685,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &6159251327013263317
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288012532733142807}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5bfb0a7a51174949937f9f4d80e132f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1368653504912100947
 GameObject:
   m_ObjectHideFlags: 0
@@ -4696,6 +4719,7 @@ GameObject:
   - component: {fileID: 4401135160766299003}
   - component: {fileID: 6719822146678738537}
   - component: {fileID: 355530103837299835}
+  - component: {fileID: 1655862754429698148}
   m_Layer: 0
   m_Name: Door_Buttom
   m_TagString: Untagged
@@ -4732,7 +4756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 3636595917894678161}
-  animator: {fileID: 0}
+  animator: {fileID: 1655862754429698148}
   solidCollider: {fileID: 0}
   isLocked: 0
   normalDoorAnim: {fileID: 0}
@@ -4846,6 +4870,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &1655862754429698148
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368653504912100947}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5bfb0a7a51174949937f9f4d80e132f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1835082215659425711
 GameObject:
   m_ObjectHideFlags: 0
@@ -5288,6 +5334,7 @@ GameObject:
   - component: {fileID: 3029051080106660074}
   - component: {fileID: 5068055182555722875}
   - component: {fileID: 6550886721329145204}
+  - component: {fileID: 5296578797407592771}
   m_Layer: 0
   m_Name: Door_Rigth
   m_TagString: Untagged
@@ -5324,7 +5371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 248616529845486675}
-  animator: {fileID: 0}
+  animator: {fileID: 5296578797407592771}
   solidCollider: {fileID: 0}
   isLocked: 0
   normalDoorAnim: {fileID: 0}
@@ -5438,6 +5485,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &5296578797407592771
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050669452643706509}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5bfb0a7a51174949937f9f4d80e132f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3457362390206607143
 GameObject:
   m_ObjectHideFlags: 0
@@ -5572,6 +5641,7 @@ GameObject:
   - component: {fileID: 1803132252949594391}
   - component: {fileID: 9177238127916082108}
   - component: {fileID: 6966275255276392340}
+  - component: {fileID: 2032968534814337722}
   m_Layer: 0
   m_Name: Door_Left
   m_TagString: Untagged
@@ -5608,7 +5678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   spawnPoint: {fileID: 1859468009771906330}
-  animator: {fileID: 0}
+  animator: {fileID: 2032968534814337722}
   solidCollider: {fileID: 0}
   isLocked: 0
   normalDoorAnim: {fileID: 0}
@@ -5722,6 +5792,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &2032968534814337722
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4059653528274951746}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5bfb0a7a51174949937f9f4d80e132f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4954668335865131349
 GameObject:
   m_ObjectHideFlags: 0

@@ -238,6 +238,12 @@ MonoBehaviour:
   flashDuration: 0.1
   damageTextPrefab: {fileID: 5710471419345742652, guid: 5e062314ae3a02c41ae94b10692b5b12, type: 3}
   textSpawnPoint: {fileID: 6118617742911794504}
+  deathSprites:
+  - {fileID: -768411493775191077, guid: 7d494a31b733d4a40a0e0944de27c1a4, type: 3}
+  - {fileID: 1823301100494683294, guid: 0b57e8f42362a094fbdc47906446e756, type: 3}
+  - {fileID: 7463517037184539283, guid: 3d6a4ace89cbe9b4ab5e88c88901678d, type: 3}
+  - {fileID: -9002594725882206575, guid: 661a89cf1c86e4b4a8c6cc79c32875e6, type: 3}
+  deathFrameTime: 0.15
 --- !u!114 &7333907733213202103
 MonoBehaviour:
   m_ObjectHideFlags: 0

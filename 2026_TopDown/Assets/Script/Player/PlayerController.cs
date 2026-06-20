@@ -6,7 +6,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     [Header("이동 및 속도 (물리 엔진)")]
-    public float maxSpeed = 5f;     // 즉시 도달할 최고 속도
+    public float maxSpeed = 1f;     // 기본 최고 속도를 1로 변경
     public float frameTime = 0.15f;
 
     [Header("방향별 애니메이션 스프라이트")]
@@ -34,10 +34,13 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public Vector2 lastFacingDir = Vector2.down;
 
+    private PlayerStats playerStats; // 스탯 스크립트 연결용
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        playerStats = GetComponent<PlayerStats>(); // 플레이어 스탯 가져오기
 
         currentSprites = spriteDown;
         sr.sprite = currentSprites[0];
@@ -108,12 +111,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        // 방향키를 누르고 있을 때 가속 없이 즉시 maxSpeed의 속도를 냅니다.
+        // PlayerStats에서 현재 이동 속도를 가져옴 (없으면 기본값 1 적용)
+        float currentMaxSpeed = playerStats != null ? playerStats.currentMoveSpeed : maxSpeed;
+
         if (input.sqrMagnitude > 0.01f)
         {
-            rb.linearVelocity = input.normalized * maxSpeed;
+            rb.linearVelocity = input.normalized * currentMaxSpeed;
         }
-        // 방향키를 떼면 아무것도 하지 않으며, Rigidbody의 Linear Drag 설정에 의해 미끄러지며 멈춥니다.
     }
 
     private void ChangeSprites(Sprite[] newSprites)

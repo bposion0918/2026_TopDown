@@ -24,10 +24,10 @@ public class PlayerAttack : MonoBehaviour
     private int originalBaseDamage = 5;
     private int lastLoggedLevel = 0;
 
-    // [추가됨] 초과 차징 관리를 위한 타이머 변수들
     private float overchargeTimer = 0f;
     private int overchargeTicks = 0;
     private PlayerOxygen playerOxygen;
+    private PlayerStats playerStats; // [추가됨]
 
     [Header("게이지 UI 설정")]
     public Image chargeGaugeImage;
@@ -62,16 +62,19 @@ public class PlayerAttack : MonoBehaviour
     private Collider2D weaponCollider;
 
     private PlayerWeapon playerWeaponScript;
+    private Vector3 originalWeaponScale; // [추가됨] 무기 사거리 계산용
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
-        playerOxygen = GetComponent<PlayerOxygen>(); // [추가됨] 산소 스크립트 가져오기
+        playerOxygen = GetComponent<PlayerOxygen>();
+        playerStats = GetComponent<PlayerStats>();
 
         if (weaponObject != null)
         {
             weaponCollider = weaponObject.GetComponent<Collider2D>();
             playerWeaponScript = weaponObject.GetComponent<PlayerWeapon>();
+            originalWeaponScale = weaponObject.transform.localScale; // 무기의 원래 크기 기억하기
 
             if (playerWeaponScript != null)
             {
@@ -98,67 +101,60 @@ public class PlayerAttack : MonoBehaviour
     {
         if (isCharging)
         {
-            // 아직 100% 미만일 때 (기 모으는 중)
-            if (currentChargeTime < maxChargeTime)
+            // 공격 속도 배율 가져오기 (수치가 낮을수록 빨리 차징됨)
+            float speedMultiplier = playerStats != null ? playerStats.currentAttackSpeed : 1f;
+            float actualMaxChargeTime = maxChargeTime * speedMultiplier;
+            float actualChargeInterval = chargeInterval * speedMultiplier;
+
+            if (currentChargeTime < actualMaxChargeTime)
             {
                 currentChargeTime += Time.deltaTime;
 
-                if (currentChargeTime >= maxChargeTime)
+                if (currentChargeTime >= actualMaxChargeTime)
                 {
-                    currentChargeTime = maxChargeTime;
+                    currentChargeTime = actualMaxChargeTime;
 
                     if (!hasFlashedMax)
                     {
                         hasFlashedMax = true;
                         StartCoroutine(MaxChargeFlashRoutine());
 
-                        // 100% 도달 즉시 첫 번째 레디 사운드 재생
                         if (AudioManager.instance != null) AudioManager.instance.PlayChargeReady();
 
-                        overchargeTicks = 1;  // 1번 울렸다고 기록
-                        overchargeTimer = 0f; // 타이머 시작
+                        overchargeTicks = 1;
+                        overchargeTimer = 0f;
                     }
                 }
 
-                // 단계 로그용
-                int currentLevel = Mathf.FloorToInt(currentChargeTime / chargeInterval);
+                int currentLevel = actualChargeInterval > 0 ? Mathf.FloorToInt(currentChargeTime / actualChargeInterval) : 0;
                 if (currentLevel > lastLoggedLevel)
                 {
                     lastLoggedLevel = currentLevel;
-                    if (currentChargeTime >= maxChargeTime)
-                        Debug.Log($"[최대 차지 도달!] {currentLevel}단계 (데미지 +{currentLevel * 20}%)");
-                    else
-                        Debug.Log($"[차지 중...] {currentLevel}단계 (데미지 +{currentLevel * 20}%)");
                 }
             }
             else
             {
-                // [추가됨] 100% 도달 이후 유지 상태 로직 (초과 차징)
                 overchargeTimer += Time.deltaTime;
 
-                if (overchargeTimer >= 1.0f) // 1초 지날 때마다
+                if (overchargeTimer >= 1.0f)
                 {
                     overchargeTimer -= 1.0f;
                     overchargeTicks++;
 
-                    // 100% 도달 후 1초, 2초 경과 (총 3번 울림)
                     if (overchargeTicks <= 3)
                     {
                         if (AudioManager.instance != null) AudioManager.instance.PlayChargeReady();
                     }
-                    // 3초를 초과하여 계속 누르고 있을 때 (경고음 + 산소 감소)
                     else
                     {
                         if (AudioManager.instance != null) AudioManager.instance.PlayWarningSound();
                         if (playerOxygen != null) playerOxygen.ReduceOxygenByPercentage(5f);
-                        Debug.Log("[경고] 한계 초과 유지! 산소 5% 감소");
                     }
                 }
             }
 
-            // 게이지 UI 업데이트는 계속 진행
-            float percentage = currentChargeTime / maxChargeTime;
-            int levelForUI = Mathf.FloorToInt(currentChargeTime / chargeInterval);
+            float percentage = currentChargeTime / actualMaxChargeTime;
+            int levelForUI = actualChargeInterval > 0 ? Mathf.FloorToInt(currentChargeTime / actualChargeInterval) : 0;
             UpdateGaugeUI(percentage, levelForUI);
             HandleGaugeShake(percentage);
         }
@@ -208,11 +204,8 @@ public class PlayerAttack : MonoBehaviour
         {
             Vector2 randomOffset = Random.insideUnitCircle * shakeAmount;
 
-            if (gaugeRect != null)
-                gaugeRect.anchoredPosition = originalGaugePos + randomOffset;
-
-            if (bgRect != null)
-                bgRect.anchoredPosition = originalBgPos + randomOffset;
+            if (gaugeRect != null) gaugeRect.anchoredPosition = originalGaugePos + randomOffset;
+            if (bgRect != null) bgRect.anchoredPosition = originalBgPos + randomOffset;
         }
         else
         {
@@ -233,10 +226,8 @@ public class PlayerAttack : MonoBehaviour
                 currentChargeTime = 0f;
                 lastLoggedLevel = 0;
 
-                // [추가됨] 공격 시작할 때 오버차지 타이머 초기화
                 overchargeTimer = 0f;
                 overchargeTicks = 0;
-
                 hasFlashedMax = false;
                 isFlashing = false;
 
@@ -271,24 +262,35 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         canAttack = false;
 
-        float currentAttackDuration = attackDuration;
+        // 공속 스탯이 무기 휘두르는 속도, 차징 속도, 쿨타임에 전부 다르게 적용됨!
+        float speedMultiplier = playerStats != null ? playerStats.currentAttackSpeed : 1f;
+        float actualAttackDuration = attackDuration * speedMultiplier;
+        float actualFastAttackDuration = fastAttackDuration * speedMultiplier;
+        float actualMaxChargeTime = maxChargeTime * speedMultiplier;
+        float actualChargeInterval = chargeInterval * speedMultiplier;
+        float actualCooldown = attackCooldown * speedMultiplier;
+
+        float currentAttackDuration = actualAttackDuration;
 
         if (playerWeaponScript != null)
         {
             playerWeaponScript.ClearHitList();
 
-            int chargeLevel = Mathf.FloorToInt(currentChargeTime / chargeInterval);
-            float damageMultiplier = 1.0f + (chargeLevel * damageBonusPerInterval);
-            int finalDamage = Mathf.RoundToInt(originalBaseDamage * damageMultiplier);
+            // 공격력 스탯 연동
+            int baseDmg = playerStats != null ? playerStats.currentDamage : originalBaseDamage;
+            int chargeLevel = actualChargeInterval > 0 ? Mathf.FloorToInt(currentChargeTime / actualChargeInterval) : 0;
 
-            float percentage = currentChargeTime / maxChargeTime;
+            float damageMultiplier = 1.0f + (chargeLevel * damageBonusPerInterval);
+            int finalDamage = Mathf.RoundToInt(baseDmg * damageMultiplier);
+
+            float percentage = currentChargeTime / actualMaxChargeTime;
             playerWeaponScript.isFullyCharged = false;
 
             if (percentage >= 1.0f)
             {
                 finalDamage = Mathf.RoundToInt(finalDamage * maxChargeBonus);
                 playerWeaponScript.isFullyCharged = true;
-                currentAttackDuration = fastAttackDuration;
+                currentAttackDuration = actualFastAttackDuration;
 
                 if (AudioManager.instance != null) AudioManager.instance.PlayChargedAttack();
             }
@@ -297,7 +299,7 @@ public class PlayerAttack : MonoBehaviour
                 if (percentage >= shakeThreshold)
                 {
                     finalDamage = Mathf.RoundToInt(finalDamage * highChargeBonus);
-                    currentAttackDuration = fastAttackDuration;
+                    currentAttackDuration = actualFastAttackDuration;
                 }
 
                 if (AudioManager.instance != null) AudioManager.instance.PlayNormalAttack();
@@ -306,7 +308,14 @@ public class PlayerAttack : MonoBehaviour
             playerWeaponScript.damage = finalDamage;
         }
 
-        weaponObject.SetActive(true);
+        // 사거리 스탯 연동: 숫자가 높으면 무기가 확 커짐!
+        if (weaponObject != null)
+        {
+            float rangeMultiplier = playerStats != null ? playerStats.currentRange : 1f;
+            weaponObject.transform.localScale = originalWeaponScale * rangeMultiplier;
+            weaponObject.SetActive(true);
+        }
+
         if (weaponCollider != null) weaponCollider.enabled = true;
 
         Vector2 aimDir = playerController.lastFacingDir;
@@ -329,15 +338,10 @@ public class PlayerAttack : MonoBehaviour
         weaponObject.SetActive(false);
         isAttacking = false;
 
-        float remainingCooldown = attackCooldown - (currentAttackDuration + weaponLingerTime);
+        float remainingCooldown = actualCooldown - (currentAttackDuration + weaponLingerTime);
         if (remainingCooldown > 0)
         {
             yield return new WaitForSeconds(remainingCooldown);
-        }
-
-        if (playerWeaponScript != null)
-        {
-            playerWeaponScript.damage = originalBaseDamage;
         }
 
         canAttack = true;

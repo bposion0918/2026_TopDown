@@ -6449,10 +6449,13 @@ MonoBehaviour:
   maxHealth: 10
   isDummy: 1
   oxygenRewardPercentage: 1
+  oxygenDamageAmount: 10
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.1
   damageTextPrefab: {fileID: 5710471419345742652, guid: 5e062314ae3a02c41ae94b10692b5b12, type: 3}
   textSpawnPoint: {fileID: 2513223286887617694}
+  deathSprites: []
+  deathFrameTime: 0.15
 --- !u!1 &7406662365789165159
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,16 +32,15 @@ public class PlayerAttack : MonoBehaviour
     [Header("게이지 효과 (흔들림 및 반짝임)")]
     public float shakeThreshold = 0.8f;
     public float shakeAmount = 2f;
-    public Color flashColor = Color.white;  // 100% 도달 시 반짝일 색상
-    public float flashDuration = 0.05f;     // 반짝이는 속도
-    public int flashCount = 3;              // 반짝이는 횟수
+    public Color flashColor = Color.white;
+    public float flashDuration = 0.05f;
+    public int flashCount = 3;
 
     private RectTransform gaugeRect;
     private RectTransform bgRect;
     private Vector2 originalGaugePos;
     private Vector2 originalBgPos;
 
-    // 반짝임 제어를 위한 변수들
     private bool hasFlashedMax = false;
     private bool isFlashing = false;
 
@@ -95,16 +94,20 @@ public class PlayerAttack : MonoBehaviour
         {
             currentChargeTime += Time.deltaTime;
 
-            // 100% 도달 체크
             if (currentChargeTime >= maxChargeTime)
             {
                 currentChargeTime = maxChargeTime;
 
-                // 100%가 되는 순간 딱 한 번만 반짝임 코루틴을 실행합니다.
                 if (!hasFlashedMax)
                 {
                     hasFlashedMax = true;
                     StartCoroutine(MaxChargeFlashRoutine());
+
+                    // [추가됨] 기 모으기 100% 완료 사운드 재생
+                    if (AudioManager.instance != null)
+                    {
+                        AudioManager.instance.PlayChargeReady();
+                    }
                 }
             }
 
@@ -136,7 +139,6 @@ public class PlayerAttack : MonoBehaviour
         {
             chargeGaugeImage.fillAmount = percentage;
 
-            // 반짝임 효과 중이 아닐 때만 원래 설정한 단계별 색상을 유지합니다.
             if (!isFlashing && gaugeColors != null && gaugeColors.Length > 0)
             {
                 int colorIndex = Mathf.Clamp(level, 0, gaugeColors.Length - 1);
@@ -145,12 +147,10 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    // 100% 도달 시 하얀색으로 빠르게 깜빡이는 코루틴
     private IEnumerator MaxChargeFlashRoutine()
     {
         isFlashing = true;
 
-        // 가장 마지막 단계의 색상을 미리 기억해둡니다.
         int maxLevel = Mathf.FloorToInt(maxChargeTime / chargeInterval);
         Color originalColor = Color.white;
         if (gaugeColors != null && gaugeColors.Length > 0)
@@ -159,7 +159,6 @@ public class PlayerAttack : MonoBehaviour
             originalColor = gaugeColors[colorIndex];
         }
 
-        // 설정한 횟수만큼 하얀색과 원래 색상을 오가며 깜빡입니다.
         for (int i = 0; i < flashCount; i++)
         {
             if (chargeGaugeImage != null) chargeGaugeImage.color = flashColor;
@@ -203,21 +202,14 @@ public class PlayerAttack : MonoBehaviour
                 currentChargeTime = 0f;
                 lastLoggedLevel = 0;
 
-                // 마우스를 눌러 새로운 공격을 시작할 때 반짝임 변수들도 초기화합니다.
                 hasFlashedMax = false;
                 isFlashing = false;
 
                 if (gaugeRect != null) originalGaugePos = gaugeRect.anchoredPosition;
                 if (bgRect != null) originalBgPos = bgRect.anchoredPosition;
 
-                if (chargeGaugeImage != null)
-                {
-                    chargeGaugeImage.gameObject.SetActive(true);
-                }
-                if (chargeGaugeBackground != null)
-                {
-                    chargeGaugeBackground.SetActive(true);
-                }
+                if (chargeGaugeImage != null) chargeGaugeImage.gameObject.SetActive(true);
+                if (chargeGaugeBackground != null) chargeGaugeBackground.SetActive(true);
 
                 UpdateGaugeUI(0f, 0);
 
@@ -233,14 +225,8 @@ public class PlayerAttack : MonoBehaviour
                 if (gaugeRect != null) gaugeRect.anchoredPosition = originalGaugePos;
                 if (bgRect != null) bgRect.anchoredPosition = originalBgPos;
 
-                if (chargeGaugeImage != null)
-                {
-                    chargeGaugeImage.gameObject.SetActive(false);
-                }
-                if (chargeGaugeBackground != null)
-                {
-                    chargeGaugeBackground.SetActive(false);
-                }
+                if (chargeGaugeImage != null) chargeGaugeImage.gameObject.SetActive(false);
+                if (chargeGaugeBackground != null) chargeGaugeBackground.SetActive(false);
 
                 StartCoroutine(SwingWeaponRoutine());
             }
@@ -271,16 +257,24 @@ public class PlayerAttack : MonoBehaviour
                 playerWeaponScript.isFullyCharged = true;
                 currentAttackDuration = fastAttackDuration;
                 Debug.Log("[풀 차지 보너스 발동!] 데미지 3배 증폭 & 공격 속도 상승!");
+
+                // [추가됨] 풀 차지 공격 사운드 재생
+                if (AudioManager.instance != null) AudioManager.instance.PlayChargedAttack();
             }
-            else if (percentage >= shakeThreshold)
+            else
             {
-                finalDamage = Mathf.RoundToInt(finalDamage * highChargeBonus);
-                currentAttackDuration = fastAttackDuration;
-                Debug.Log("[고출력 차지 보너스 발동!] 데미지 1.5배 증폭 & 공격 속도 상승!");
+                if (percentage >= shakeThreshold)
+                {
+                    finalDamage = Mathf.RoundToInt(finalDamage * highChargeBonus);
+                    currentAttackDuration = fastAttackDuration;
+                    Debug.Log("[고출력 차지 보너스 발동!] 데미지 1.5배 증폭 & 공격 속도 상승!");
+                }
+
+                // [추가됨] 일반 공격 (또는 고출력 공격) 사운드 재생
+                if (AudioManager.instance != null) AudioManager.instance.PlayNormalAttack();
             }
 
             playerWeaponScript.damage = finalDamage;
-
             Debug.Log($"[공격 발동!] 총 차지 시간: {currentChargeTime:F1}초 / 최종 데미지: {finalDamage}");
         }
 

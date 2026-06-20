@@ -81,6 +81,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // --- SFX 재생 공통 도우미 ---
     private void PlaySFX(AudioClip clip)
     {
         if (sfxSource != null && clip != null)
@@ -89,10 +90,34 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayButtonClickSFX() => PlaySFX(buttonClickClip);
-    public void PlayHitSFX() => PlaySFX(playerHitClip);
-    public void PlayNormalAttack() => PlaySFX(normalAttackClip);
-    public void PlayChargedAttack() => PlaySFX(chargedAttackClip);
-    public void PlayChargeReady() => PlaySFX(chargeReadyClip);
-    public void PlayWarningSound() => PlaySFX(warningClip); // [추가됨] 경고음 실행 함수
+    // 아래 부분을 이렇게 전통적인 괄호 형태로 바꿔주세요!
+    public void PlayButtonClickSFX()
+    {
+        PlaySFX(buttonClickClip);
+    }
+
+    public void PlayHitSFX()
+    {
+        PlaySFX(playerHitClip);
+    }
+
+    public void PlayNormalAttack()
+    {
+        PlaySFX(normalAttackClip);
+    }
+
+    public void PlayChargedAttack()
+    {
+        PlaySFX(chargedAttackClip);
+    }
+
+    public void PlayChargeReady()
+    {
+        PlaySFX(chargeReadyClip);
+    }
+
+    public void PlayWarningSound()
+    {
+        PlaySFX(warningClip);
+    }
 }

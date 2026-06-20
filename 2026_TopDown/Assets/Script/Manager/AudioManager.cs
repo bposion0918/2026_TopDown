@@ -17,20 +17,20 @@ public class AudioManager : MonoBehaviour
     public AudioClip buttonClickClip;
     public AudioClip playerHitClip;
 
-    [Header("공격 효과음 3종")]
-    public AudioClip normalAttackClip;   // 1. 일반 평타
-    public AudioClip chargedAttackClip;  // 2. 풀차지 공격
-    public AudioClip chargeReadyClip;    // 3. 기 모으는 소리 (또는 타격음)
+    [Header("공격 효과음 3종 + 경고음")]
+    public AudioClip normalAttackClip;
+    public AudioClip chargedAttackClip;
+    public AudioClip chargeReadyClip;
+    public AudioClip warningClip;        // [추가됨] 한계 초과 경고음
 
     [Header("배경음악 목록")]
-    public AudioClip[] bgmList; // 여러 브금을 담아둘 공간
+    public AudioClip[] bgmList;
 
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            // 씬을 넘어가도 배경음악이 끊기지 않게 유지해 줍니다.
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -60,7 +60,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // --- 볼륨 조절 (이 함수 하나로 전체 사운드가 조절됩니다) ---
     public void SetBGMVolume(float volume)
     {
         if (bgmSource != null) bgmSource.volume = volume * 0.1f;
@@ -73,10 +72,8 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat("SfxVolume", volume);
     }
 
-    // --- BGM 재생 ---
     public void PlayBGM(int bgmIndex)
     {
-        // 배열 범위 에러 방지
         if (bgmSource != null && bgmList.Length > 0 && bgmIndex < bgmList.Length)
         {
             bgmSource.clip = bgmList[bgmIndex];
@@ -84,8 +81,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // --- SFX 재생 공통 도우미 ---
-    // 여러 개의 오디오 클립을 한 소스에서 겹치게 재생해 줍니다.
     private void PlaySFX(AudioClip clip)
     {
         if (sfxSource != null && clip != null)
@@ -94,10 +89,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // --- 개별 효과음 실행 ---
     public void PlayButtonClickSFX() => PlaySFX(buttonClickClip);
     public void PlayHitSFX() => PlaySFX(playerHitClip);
     public void PlayNormalAttack() => PlaySFX(normalAttackClip);
     public void PlayChargedAttack() => PlaySFX(chargedAttackClip);
     public void PlayChargeReady() => PlaySFX(chargeReadyClip);
+    public void PlayWarningSound() => PlaySFX(warningClip); // [추가됨] 경고음 실행 함수
 }

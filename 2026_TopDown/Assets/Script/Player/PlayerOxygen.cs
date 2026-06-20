@@ -13,7 +13,7 @@ public class PlayerOxygen : MonoBehaviour
     [Header("UI Settings")]
     public Image oxygenFillImage;
     public GameObject oxygenBackground;
-    public TextMeshProUGUI oxygenText;         // "O2 : 100 / 100"을 표시할 텍스트
+    public TextMeshProUGUI oxygenText;
 
     [Header("Blink Settings")]
     public float blinkThreshold = 0.2f;
@@ -90,6 +90,14 @@ public class PlayerOxygen : MonoBehaviour
             DieFromLackOfOxygen();
         }
         UpdateOxygenUI();
+    }
+
+    // [추가됨] 퍼센트 단위로 산소를 깎아버리는 함수
+    public void ReduceOxygenByPercentage(float percent)
+    {
+        if (isDead) return;
+        float reduceAmount = maxOxygen * (percent / 100f);
+        ReduceOxygen(reduceAmount);
     }
 
     public void AddOxygenByPercentage(float percent)

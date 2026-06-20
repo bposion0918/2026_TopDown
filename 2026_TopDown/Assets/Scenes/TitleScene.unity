@@ -601,10 +601,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BGMController
   bgmSource: {fileID: 390078870}
   sfxSource: {fileID: 390078873}
-  bgmSlider: {fileID: 1043143617}
-  sfxSlider: {fileID: 1824381365}
   buttonClickClip: {fileID: 8300000, guid: 1b4158defbcbe1f4bad1e79ca5648866, type: 3}
   playerHitClip: {fileID: 8300000, guid: 666a586f25f127c4c9bc496b6c5797ae, type: 3}
+  normalAttackClip: {fileID: 8300000, guid: 652bbd0eb4f999d448f0718f39dba0e7, type: 3}
+  chargedAttackClip: {fileID: 8300000, guid: 8298bc8591f1c1640aba974afe4ee1bf, type: 3}
+  chargeReadyClip: {fileID: 8300000, guid: 8d7bad6b21d55884996ab7964dbe48dd, type: 3}
+  warningClip: {fileID: 8300000, guid: c550d9a63e08f9e4a8631913fcc60d4c, type: 3}
+  bgmList:
+  - {fileID: 8300000, guid: 6e5617c1813abdb4c8d833126243c65f, type: 3}
+  - {fileID: 8300000, guid: 0da55b47b760fda42bff1024b9acaa82, type: 3}
 --- !u!82 &390078873
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1144,6 +1149,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1364750398}
+        m_TargetAssemblyTypeName: SoundUIConnector, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &876961795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1532,6 +1549,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1364750398}
+        m_TargetAssemblyTypeName: SoundUIConnector, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1144869645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1730,6 +1759,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1092071631}
         m_TargetAssemblyTypeName: ScreenSettingManager, Assembly-CSharp
         m_MethodName: SetWindowed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1364750398}
+        m_TargetAssemblyTypeName: SoundUIConnector, Assembly-CSharp
+        m_MethodName: OnButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2154,6 +2195,7 @@ GameObject:
   - component: {fileID: 1364750396}
   - component: {fileID: 1364750395}
   - component: {fileID: 1364750394}
+  - component: {fileID: 1364750398}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2246,6 +2288,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1364750398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364750393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98d25dca78ca9424382452f8a0816322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundUIConnector
+  bgmSlider: {fileID: 1043143617}
+  sfxSlider: {fileID: 1824381365}
 --- !u!1 &1365953489
 GameObject:
   m_ObjectHideFlags: 0
@@ -2760,9 +2816,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 390078872}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayButtonClickSFX
+      - m_Target: {fileID: 1364750398}
+        m_TargetAssemblyTypeName: SoundUIConnector, Assembly-CSharp
+        m_MethodName: OnButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3158,9 +3214,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 390078872}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayButtonClickSFX
+      - m_Target: {fileID: 1364750398}
+        m_TargetAssemblyTypeName: SoundUIConnector, Assembly-CSharp
+        m_MethodName: OnButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3397,9 +3453,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 390078872}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: PlayButtonClickSFX
+      - m_Target: {fileID: 1364750398}
+        m_TargetAssemblyTypeName: SoundUIConnector, Assembly-CSharp
+        m_MethodName: OnButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

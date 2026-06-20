@@ -155,7 +155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36, y: -176}
+  m_AnchoredPosition: {x: 38, y: -182}
   m_SizeDelta: {x: 320, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &34341318
@@ -6079,7 +6079,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackDuration: 0.4
   fastAttackDuration: 0.2
-  attackCooldown: 1.4
+  attackCooldown: 1
   weaponLingerTime: 0.2
   swingAngle: 135
   maxChargeTime: 2.5
@@ -6219,7 +6219,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -136, y: -176}
+  m_AnchoredPosition: {x: -134, y: -182}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1944155261
@@ -7234,6 +7234,7 @@ MonoBehaviour:
   normalAttackClip: {fileID: 8300000, guid: 652bbd0eb4f999d448f0718f39dba0e7, type: 3}
   chargedAttackClip: {fileID: 8300000, guid: 8298bc8591f1c1640aba974afe4ee1bf, type: 3}
   chargeReadyClip: {fileID: 8300000, guid: 8d7bad6b21d55884996ab7964dbe48dd, type: 3}
+  warningClip: {fileID: 8300000, guid: c550d9a63e08f9e4a8631913fcc60d4c, type: 3}
   bgmList: []
 --- !u!82 &2141511799
 AudioSource:

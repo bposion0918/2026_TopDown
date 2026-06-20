@@ -24,7 +24,7 @@ public class PlayerHealth : MonoBehaviour
     private int playerLayer;
     private int enemyLayer;
 
-    // 더 이상 산소를 깎지 않으므로 playerOxygen 변수는 유지하되 로직에서 뺐습니다.
+    // 산소를 깎아야 하므로 PlayerOxygen 컴포넌트를 연결해 둡니다.
     private PlayerOxygen playerOxygen;
 
     void Start()
@@ -46,7 +46,8 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
     }
 
-    public void TakeDamage(int damage)
+    // [수정됨] 산소 피해량(oxygenDamage)을 추가로 받을 수 있게 만들었습니다. 기본값은 0입니다.
+    public void TakeDamage(int damage, float oxygenDamage = 0f)
     {
         if (isDead) return;
         if (isInvincible) return;
@@ -54,7 +55,12 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         Debug.Log($"현재 체력: {currentHealth} / {maxHealth}");
 
-        // --- 피격 시 산소가 닳는 로직을 삭제했습니다 ---
+        // --- 피격 시 산소가 닳는 로직을 복구했습니다 ---
+        if (oxygenDamage > 0f && playerOxygen != null)
+        {
+            playerOxygen.ReduceOxygen(oxygenDamage);
+            Debug.Log($"몬스터에게 피격당해 산소가 {oxygenDamage}만큼 깎였습니다!");
+        }
 
         if (healthUI != null)
         {
@@ -128,17 +134,16 @@ public class PlayerHealth : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // 부딪힌 대상의 EnemyHealth 컴포넌트를 가져옵니다.
             EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
 
-            // 만약 컴포넌트가 존재하고, 그 적이 '더미'라면 데미지를 입지 않고 함수를 빠져나갑니다.
             if (enemyHealth != null && enemyHealth.isDummy)
             {
                 return;
             }
 
-            // 더미가 아닌 진짜 적일 때만 데미지를 입습니다.
-            TakeDamage(1);
+            // [수정됨] 몬스터가 가진 고유의 산소 피해량을 가져와서 적용합니다.
+            float oxDamage = (enemyHealth != null) ? enemyHealth.oxygenDamageAmount : 0f;
+            TakeDamage(1, oxDamage);
         }
     }
 }

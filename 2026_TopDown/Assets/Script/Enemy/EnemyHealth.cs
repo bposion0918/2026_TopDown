@@ -10,8 +10,9 @@ public class EnemyHealth : MonoBehaviour
     [Header("더미(테스트용) 모드")]
     public bool isDummy = false;
 
-    [Header("산소 회복량")]
+    [Header("산소 회복 및 피해량")]
     public float oxygenRewardPercentage = 1f;
+    public float oxygenDamageAmount = 10f; // [추가됨] 플레이어를 때렸을 때 깎을 산소 수치
 
     [Header("피격 효과 및 텍스트")]
     public Color damageColor = Color.red;
@@ -26,14 +27,13 @@ public class EnemyHealth : MonoBehaviour
     private EnemyAI enemyAI;
     private SpriteRenderer sr;
     private Coroutine flashCoroutine;
-    private bool isDead = false; // 이미 죽었는지 체크하는 변수 추가
+    private bool isDead = false;
 
     void Start()
     {
         currentHealth = maxHealth;
         sr = GetComponent<SpriteRenderer>();
 
-        // 더미가 아닐 때만 AI를 가져옵니다.
         if (!isDummy)
         {
             enemyAI = GetComponent<EnemyAI>();
@@ -48,12 +48,10 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage, Vector2 knockbackDir, float knockbackPower, bool isFullyCharged = false)
     {
-        // 이미 죽은 상태면 더 이상 데미지를 입지 않도록 차단
         if (isDead) return;
 
         currentHealth -= damage;
 
-        // --- 1. 데미지 텍스트 띄우기 ---
         if (damageTextPrefab != null && textSpawnPoint != null)
         {
             Vector3 randomOffset = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.2f, 0.2f), 0);
@@ -64,14 +62,12 @@ public class EnemyHealth : MonoBehaviour
             if (dmgText != null) dmgText.Setup(damage, isFullyCharged);
         }
 
-        // --- 2. 피격 시 빨간색 깜빡임 효과 ---
         if (sr != null)
         {
             if (flashCoroutine != null) StopCoroutine(flashCoroutine);
             flashCoroutine = StartCoroutine(FlashRedRoutine());
         }
 
-        // --- 3. 넉백 및 사망 처리 ---
         if (!isDummy)
         {
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -109,7 +105,6 @@ public class EnemyHealth : MonoBehaviour
         if (enemyAI != null) enemyAI.enabled = false;
         yield return new WaitForSeconds(0.2f);
 
-        // 죽지 않았을 때만 다시 AI를 켭니다
         if (this != null && currentHealth > 0 && enemyAI != null && !isDead)
         {
             enemyAI.enabled = true;
@@ -130,13 +125,11 @@ public class EnemyHealth : MonoBehaviour
             }
         }
 
-        // 즉시 삭제하는 대신 사망 애니메이션 코루틴을 실행합니다.
         StartCoroutine(DeathAnimationRoutine());
     }
 
     private IEnumerator DeathAnimationRoutine()
     {
-        // 1. 죽었을 때 플레이어를 계속 쫓아오거나 부딪히지 않도록 기능을 전부 끕니다.
         if (enemyAI != null) enemyAI.enabled = false;
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -145,7 +138,6 @@ public class EnemyHealth : MonoBehaviour
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        // 2. 등록된 사망 스프라이트가 있다면 순서대로 착착착 재생합니다.
         if (deathSprites != null && deathSprites.Length > 0)
         {
             foreach (Sprite frame in deathSprites)
@@ -156,11 +148,9 @@ public class EnemyHealth : MonoBehaviour
         }
         else
         {
-            // 만약 스프라이트를 안 넣었다면 0.2초 대기 후 사라집니다.
             yield return new WaitForSeconds(0.2f);
         }
 
-        // 3. 애니메이션이 모두 끝난 뒤에 비로소 몬스터를 삭제합니다.
         Destroy(gameObject);
     }
 }

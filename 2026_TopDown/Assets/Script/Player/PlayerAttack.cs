@@ -27,7 +27,7 @@ public class PlayerAttack : MonoBehaviour
     private float overchargeTimer = 0f;
     private int overchargeTicks = 0;
     private PlayerOxygen playerOxygen;
-    private PlayerStats playerStats; // [추가됨]
+    private PlayerStats playerStats;
 
     [Header("게이지 UI 설정")]
     public Image chargeGaugeImage;
@@ -38,8 +38,7 @@ public class PlayerAttack : MonoBehaviour
     public float shakeThreshold = 0.8f;
     public float shakeAmount = 2f;
     public Color flashColor = Color.white;
-    public float flashDuration = 0.05f;
-    public int flashCount = 3;
+    public float flashDuration = 0.08f; // 한 번 깜빡일 때 체감이 잘 되도록 0.05에서 조금 늘렸어
 
     private RectTransform gaugeRect;
     private RectTransform bgRect;
@@ -62,7 +61,7 @@ public class PlayerAttack : MonoBehaviour
     private Collider2D weaponCollider;
 
     private PlayerWeapon playerWeaponScript;
-    private Vector3 originalWeaponScale; // [추가됨] 무기 사거리 계산용
+    private Vector3 originalWeaponScale;
 
     private void Awake()
     {
@@ -74,7 +73,7 @@ public class PlayerAttack : MonoBehaviour
         {
             weaponCollider = weaponObject.GetComponent<Collider2D>();
             playerWeaponScript = weaponObject.GetComponent<PlayerWeapon>();
-            originalWeaponScale = weaponObject.transform.localScale; // 무기의 원래 크기 기억하기
+            originalWeaponScale = weaponObject.transform.localScale;
 
             if (playerWeaponScript != null)
             {
@@ -101,7 +100,6 @@ public class PlayerAttack : MonoBehaviour
     {
         if (isCharging)
         {
-            // 공격 속도 배율 가져오기 (수치가 낮을수록 빨리 차징됨)
             float speedMultiplier = playerStats != null ? playerStats.currentAttackSpeed : 1f;
             float actualMaxChargeTime = maxChargeTime * speedMultiplier;
             float actualChargeInterval = chargeInterval * speedMultiplier;
@@ -117,9 +115,10 @@ public class PlayerAttack : MonoBehaviour
                     if (!hasFlashedMax)
                     {
                         hasFlashedMax = true;
-                        StartCoroutine(MaxChargeFlashRoutine());
 
+                        // [수정됨] 100% 도달 시 1번째 소리와 함께 1번째 하얀색 깜빡임 실행
                         if (AudioManager.instance != null) AudioManager.instance.PlayChargeReady();
+                        StartCoroutine(SingleFlashRoutine(flashColor));
 
                         overchargeTicks = 1;
                         overchargeTimer = 0f;
@@ -143,12 +142,16 @@ public class PlayerAttack : MonoBehaviour
 
                     if (overchargeTicks <= 3)
                     {
+                        // [수정됨] 2번째, 3번째 소리와 함께 하얀색 깜빡임 실행
                         if (AudioManager.instance != null) AudioManager.instance.PlayChargeReady();
+                        StartCoroutine(SingleFlashRoutine(flashColor));
                     }
                     else
                     {
+                        // [수정됨] 패널티 경고음과 함께 '빨간색' 깜빡임 실행
                         if (AudioManager.instance != null) AudioManager.instance.PlayWarningSound();
                         if (playerOxygen != null) playerOxygen.ReduceOxygenByPercentage(5f);
+                        StartCoroutine(SingleFlashRoutine(Color.black));
                     }
                 }
             }
@@ -174,26 +177,26 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    private IEnumerator MaxChargeFlashRoutine()
+    // [수정됨] 여러 번 반복하던 로직을 지우고, 원하는 색상으로 딱 한 번만 깜빡이도록 변경
+    private IEnumerator SingleFlashRoutine(Color targetFlashColor)
     {
         isFlashing = true;
 
         int maxLevel = Mathf.FloorToInt(maxChargeTime / chargeInterval);
         Color originalColor = Color.white;
+
         if (gaugeColors != null && gaugeColors.Length > 0)
         {
             int colorIndex = Mathf.Clamp(maxLevel, 0, gaugeColors.Length - 1);
             originalColor = gaugeColors[colorIndex];
         }
 
-        for (int i = 0; i < flashCount; i++)
-        {
-            if (chargeGaugeImage != null) chargeGaugeImage.color = flashColor;
-            yield return new WaitForSeconds(flashDuration);
+        // 지정된 색상(하얀색 또는 빨간색)으로 번쩍!
+        if (chargeGaugeImage != null) chargeGaugeImage.color = targetFlashColor;
+        yield return new WaitForSeconds(flashDuration);
 
-            if (chargeGaugeImage != null) chargeGaugeImage.color = originalColor;
-            yield return new WaitForSeconds(flashDuration);
-        }
+        // 다시 원래 게이지 색상으로 복구
+        if (chargeGaugeImage != null) chargeGaugeImage.color = originalColor;
 
         isFlashing = false;
     }
@@ -262,7 +265,6 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         canAttack = false;
 
-        // 공속 스탯이 무기 휘두르는 속도, 차징 속도, 쿨타임에 전부 다르게 적용됨!
         float speedMultiplier = playerStats != null ? playerStats.currentAttackSpeed : 1f;
         float actualAttackDuration = attackDuration * speedMultiplier;
         float actualFastAttackDuration = fastAttackDuration * speedMultiplier;
@@ -276,7 +278,6 @@ public class PlayerAttack : MonoBehaviour
         {
             playerWeaponScript.ClearHitList();
 
-            // 공격력 스탯 연동
             int baseDmg = playerStats != null ? playerStats.currentDamage : originalBaseDamage;
             int chargeLevel = actualChargeInterval > 0 ? Mathf.FloorToInt(currentChargeTime / actualChargeInterval) : 0;
 
@@ -308,7 +309,6 @@ public class PlayerAttack : MonoBehaviour
             playerWeaponScript.damage = finalDamage;
         }
 
-        // 사거리 스탯 연동: 숫자가 높으면 무기가 확 커짐!
         if (weaponObject != null)
         {
             float rangeMultiplier = playerStats != null ? playerStats.currentRange : 1f;

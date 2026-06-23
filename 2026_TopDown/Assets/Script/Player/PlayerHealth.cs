@@ -21,10 +21,17 @@ public class PlayerHealth : MonoBehaviour
     public float invincibilityTime = 1.0f;
     private bool isInvincible = false;
 
+    [Header("산소 감소 연출 (공기방울)")]
+    public GameObject bubblePrefab;
+    public int bubbleCount = 3;
+
+    [Tooltip("방울이 나오는 기본 중심점 (Y를 낮추면 더 아래에서 나옵니다)")]
+    public Vector2 bubbleSpawnOffset = new Vector2(0f, 0.2f);
+    [Tooltip("중심점을 기준으로 방울이 무작위로 흩어지는 범위")]
+    public Vector2 bubbleRandomArea = new Vector2(0.3f, 0.2f);
+
     private int playerLayer;
     private int enemyLayer;
-
-    // 산소를 깎아야 하므로 PlayerOxygen 컴포넌트를 연결해 둡니다.
     private PlayerOxygen playerOxygen;
 
     void Start()
@@ -39,6 +46,17 @@ public class PlayerHealth : MonoBehaviour
 
         playerLayer = LayerMask.NameToLayer("Player");
         enemyLayer = LayerMask.NameToLayer("Enemy");
+
+        // [핵심 버그 수정 1] 게임이 시작될 때마다 레이어 충돌 무시 상태를 무조건 초기화!
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+    }
+
+    // [핵심 버그 수정 2] R키를 눌러 씬이 강제로 재시작되거나 파괴될 때도 무적 상태를 확실히 풀어줌!
+    private void OnDestroy()
+    {
+        int pLayer = LayerMask.NameToLayer("Player");
+        int eLayer = LayerMask.NameToLayer("Enemy");
+        Physics2D.IgnoreLayerCollision(pLayer, eLayer, false);
     }
 
     void Update()
@@ -46,7 +64,6 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
     }
 
-    // [수정됨] 산소 피해량(oxygenDamage)을 추가로 받을 수 있게 만들었습니다. 기본값은 0입니다.
     public void TakeDamage(int damage, float oxygenDamage = 0f)
     {
         if (isDead) return;
@@ -55,11 +72,22 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         Debug.Log($"현재 체력: {currentHealth} / {maxHealth}");
 
-        // --- 피격 시 산소가 닳는 로직을 복구했습니다 ---
         if (oxygenDamage > 0f && playerOxygen != null)
         {
             playerOxygen.ReduceOxygen(oxygenDamage);
             Debug.Log($"몬스터에게 피격당해 산소가 {oxygenDamage}만큼 깎였습니다!");
+
+            if (bubblePrefab != null)
+            {
+                for (int i = 0; i < bubbleCount; i++)
+                {
+                    float randomX = Random.Range(-bubbleRandomArea.x, bubbleRandomArea.x);
+                    float randomY = Random.Range(-bubbleRandomArea.y, bubbleRandomArea.y);
+
+                    Vector3 spawnPos = transform.position + new Vector3(bubbleSpawnOffset.x + randomX, bubbleSpawnOffset.y + randomY, 0);
+                    Instantiate(bubblePrefab, spawnPos, Quaternion.identity);
+                }
+            }
         }
 
         if (healthUI != null)
@@ -126,7 +154,6 @@ public class PlayerHealth : MonoBehaviour
         if (playerController == null)
             playerController = GetComponent<PlayerController>();
 
-        Debug.Log("체력이 다 닳음 -> 일반 사망 애니메이션");
         playerController.PlayNormalDeathAnimation();
     }
 
@@ -141,7 +168,6 @@ public class PlayerHealth : MonoBehaviour
                 return;
             }
 
-            // [수정됨] 몬스터가 가진 고유의 산소 피해량을 가져와서 적용합니다.
             float oxDamage = (enemyHealth != null) ? enemyHealth.oxygenDamageAmount : 0f;
             TakeDamage(1, oxDamage);
         }

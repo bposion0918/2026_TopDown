@@ -7299,7 +7299,7 @@ MonoBehaviour:
   bubblePrefab: {fileID: 1877818429892504279, guid: f08b75abfc990854e951a014e74f8e2e, type: 3}
   bubbleCount: 3
   bubbleSpawnOffset: {x: 0, y: 0.04}
-  bubbleRandomArea: {x: 0.05, y: 0.05}
+  bubbleRandomArea: {x: 0.09, y: 0.05}
 --- !u!114 &1943371453
 MonoBehaviour:
   m_ObjectHideFlags: 0
